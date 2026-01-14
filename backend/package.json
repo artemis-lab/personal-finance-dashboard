@@ -1,0 +1,55 @@
+{
+  "name": "finance-service",
+  "version": "1.0.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "author": "artemis-lab",
+  "license": "MIT",
+  "description": "A Node.js/Express API service that allows import transaction history, categorize expenses, and generate reports",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "build": "npm run clean && tsc",
+    "clean": "rm -rf dist",
+    "dev": "NODE_ENV=development tsx watch src/index.ts",
+    "format": "prettier --write \"**/*.{js,mjs,ts}\"",
+    "format:check": "prettier --check \"**/*.{js,mjs,ts}\"",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "start": "NODE_ENV=production node dist/index.js",
+    "start:dev": "NODE_ENV=development node dist/index.js",
+    "type-check": "tsc --noEmit"
+  },
+  "keywords": [
+    "transaction history",
+    "categorize expenses",
+    "reports",
+    "api",
+    "express",
+    "typescript"
+  ],
+  "dependencies": {
+    "cors": "2.8.5",
+    "express": "5.2.1",
+    "express-rate-limit": "8.2.1",
+    "helmet": "8.1.0",
+    "zod": "4.3.5"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.2",
+    "@types/cors": "2.8.19",
+    "@types/express": "5.0.6",
+    "@types/node": "24.10.1",
+    "@vitest/coverage-v8": "4.0.17",
+    "@vitest/ui": "4.0.17",
+    "eslint": "9.39.2",
+    "eslint-plugin-simple-import-sort": "12.1.1",
+    "prettier": "3.7.4",
+    "tsx": "4.21.0",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.53.0",
+    "vitest": "4.0.17"
+  }
+}
