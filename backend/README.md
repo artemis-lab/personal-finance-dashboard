@@ -29,7 +29,7 @@ A Node.js/Express API service that allows import transaction history, categorize
 
 ## Purpose
 
-A backend service for a Personal Finance Dashboard.
+A backend service for Personal Finance Dashboard.
 
 ## Getting Started
 
