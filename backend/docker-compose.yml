@@ -1,8 +1,11 @@
+name: finance-service
+
 services:
   finance-service:
     build:
       context: .
       dockerfile: Dockerfile
+    image: finance-service
     ports:
       - "3000:3000"
     environment:
@@ -10,6 +13,14 @@ services:
       # - CORS_ORIGIN=https://myapp.com
       - NODE_ENV=production
       - PORT=3000
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=personal_finance
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
     restart: unless-stopped
     healthcheck:
       test:
@@ -23,3 +34,25 @@ services:
       timeout: 3s
       retries: 3
       start_period: 5s
+
+  postgres:
+    image: postgres:17
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=personal_finance
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/db/02_create_tables.sql:/docker-entrypoint-initdb.d/01_create_tables.sql
+      - ./scripts/db/03_seed_data.sql:/docker-entrypoint-initdb.d/02_seed_data.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  postgres_data:

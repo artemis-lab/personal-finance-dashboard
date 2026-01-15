@@ -11,6 +11,7 @@ A Node.js/Express API service that allows import transaction history, categorize
   - [Prerequisites](#prerequisites)
   - [Install Dependencies](#install-dependencies)
   - [Configuration](#configuration)
+  - [Database Setup](#database-setup)
   - [Build](#build)
   - [Run](#run)
   - [Run with Docker](#run-with-docker)
@@ -37,6 +38,7 @@ A backend service for Personal Finance Dashboard.
 
 - Node.js >= 20.0.0
 - npm
+- PostgreSQL >= 14
 
 ### Install Dependencies
 
@@ -59,6 +61,41 @@ CORS_ORIGIN=https://myapp.com
 
 # Optional: Server port (default: 3000)
 PORT=8080
+
+# Database configuration (option 1: connection string)
+DATABASE_URL=postgresql://user:password@localhost:5432/personal_finance
+
+# Database configuration (option 2: individual parameters)
+DB_HOST=localhost         # default: localhost
+DB_PORT=5432              # default: 5432
+DB_NAME=personal_finance  # default: personal_finance
+DB_USER=postgres          # default: postgres
+DB_PASSWORD=postgres      # default: postgres
+```
+
+> **Note**: If `DATABASE_URL` is provided, it takes precedence over individual `DB_*` parameters.
+
+### Database Setup
+
+Initialize the PostgreSQL database with the following scripts (run in order):
+
+```bash
+# 1. Create the database (run as PostgreSQL superuser)
+psql -U postgres -f scripts/db/01_create_database.sql
+
+# 2. Create tables
+psql -U postgres -d personal_finance -f scripts/db/02_create_tables.sql
+
+# 3. Seed with sample data (200 transactions)
+psql -U postgres -d personal_finance -f scripts/db/03_seed_data.sql
+```
+
+Or run all scripts at once:
+
+```bash
+psql -U postgres -f scripts/db/01_create_database.sql && \
+psql -U postgres -d personal_finance -f scripts/db/02_create_tables.sql && \
+psql -U postgres -d personal_finance -f scripts/db/03_seed_data.sql
 ```
 
 ### Build
@@ -81,7 +118,7 @@ The server runs on `http://localhost:3000` by default (configurable via `PORT` e
 
 ### Run with Docker
 
-Test the production Docker image locally using Docker Compose (recommended):
+Test the production Docker image locally using Docker Compose:
 
 ```bash
 # Start the service (builds automatically)
@@ -98,28 +135,6 @@ docker-compose down
 
 # Rebuild and restart
 docker-compose up --build
-```
-
-Or use Docker CLI directly:
-
-```bash
-# Build and run
-docker build -t finance-service .
-docker run -p 3000:3000 --name finance-service finance-service
-
-# Run in detached mode (background)
-docker run -d -p 3000:3000 --name finance-service finance-service
-
-# Run with custom environment variables
-docker run -p 3000:3000 --name finance-service -e CORS_ORIGIN=https://myapp.com finance-service
-
-# View logs
-docker logs finance-service
-docker logs -f finance-service  # Follow logs (stream)
-
-# Stop and remove container
-docker stop finance-service
-docker rm finance-service
 ```
 
 Test the service:
