@@ -48,20 +48,15 @@ export class TransactionRepository implements ITransactionRepository {
 
     const conditions: string[] = [];
     const params: (string | number)[] = [];
+
     let paramIndex = 1;
 
     if (yearMonth) {
-      const [year, month] = yearMonth.split("-") as [string, string];
-      const startDate = `${year}-${month}-01`;
-      const monthNum = parseInt(month, 10);
-      const yearNum = parseInt(year, 10);
-      const nextMonth = monthNum === 12 ? 1 : monthNum + 1;
-      const nextYear = monthNum === 12 ? yearNum + 1 : yearNum;
-      const endDate = `${nextYear}-${String(nextMonth).padStart(2, "0")}-01`;
-
-      conditions.push(`date >= $${paramIndex} AND date < $${paramIndex + 1}`);
-      params.push(startDate, endDate);
-      paramIndex += 2;
+      conditions.push(
+        `date >= $${paramIndex} AND date < ($${paramIndex}::date + interval '1 month')`,
+      );
+      params.push(`${yearMonth}-01`);
+      paramIndex++;
     }
 
     const whereClause =
@@ -71,9 +66,6 @@ export class TransactionRepository implements ITransactionRepository {
     const sortDirection = sortOrder === "asc" ? "ASC" : "DESC";
 
     const countQuery = `SELECT COUNT(*) as total FROM transactions ${whereClause}`;
-    const countResult = await this.pool.query(countQuery, params);
-    const total = parseInt(countResult.rows[0].total);
-
     const dataQuery = `
       SELECT amount, date, description, id, merchant, transaction_type,
              category, category_source, account, balance, reference, transaction_method
@@ -82,11 +74,17 @@ export class TransactionRepository implements ITransactionRepository {
       ORDER BY ${sortColumn} ${sortDirection}
       LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
     `;
+    const countParams = [...params];
     params.push(limit, offset);
 
-    const result = await this.pool.query<TransactionRow>(dataQuery, params);
-    const transactions = result.rows.map(rowToTransaction);
+    const [countResult, dataResult] = await Promise.all([
+      this.pool.query(countQuery, countParams),
+      this.pool.query<TransactionRow>(dataQuery, params),
+    ]);
 
-    return { transactions, total };
+    return {
+      transactions: dataResult.rows.map(rowToTransaction),
+      total: parseInt(countResult.rows[0].total, 10),
+    };
   }
 }
