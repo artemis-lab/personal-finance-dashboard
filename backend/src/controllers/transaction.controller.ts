@@ -1,8 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 
-import type { ILogger } from "../logger";
 import type { ITransactionService } from "../services";
-import { TransactionService } from "../services";
 import type { TransactionListResponse } from "../types/transaction.types";
 import { transactionListQuerySchema } from "../validators/transaction.validator";
 
@@ -12,9 +10,8 @@ import { transactionListQuerySchema } from "../validators/transaction.validator"
 export class TransactionController {
   private transactionService: ITransactionService;
 
-  constructor(transactionService?: ITransactionService, logger?: ILogger) {
-    this.transactionService =
-      transactionService || new TransactionService(logger);
+  constructor(transactionService: ITransactionService) {
+    this.transactionService = transactionService;
   }
 
   /**

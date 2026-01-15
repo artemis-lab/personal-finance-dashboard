@@ -3,6 +3,7 @@ import express, { type Express, json, Response } from "express";
 import helmet from "helmet";
 import type { Server } from "http";
 
+import { closePool, pool } from "./config/database";
 import {
   API_V1_PATH,
   CORS_ORIGIN,
@@ -10,10 +11,13 @@ import {
   PORT,
   REQUEST_BODY_LIMIT,
 } from "./constants";
+import { TransactionController } from "./controllers/transaction.controller";
 import { Logger } from "./logger";
 import { ErrorHandler } from "./middleware/error.middleware";
 import { globalRateLimiter } from "./middleware/rate-limit.middleware";
+import { TransactionRepository } from "./repositories";
 import { TransactionRoutes } from "./routes/transaction.routes";
+import { TransactionService } from "./services";
 import { HealthCheckResponse } from "./types/transaction.types";
 
 const logger = new Logger();
@@ -38,11 +42,18 @@ app.get(HEALTH_PATH, (_req, res: Response<HealthCheckResponse>) => {
   res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
-// API routes - share logger instance
-const transactionRoutes = new TransactionRoutes(undefined, logger);
+// Initialize dependencies
+const transactionRepository = new TransactionRepository(pool);
+const transactionService = new TransactionService(
+  transactionRepository,
+  logger,
+);
+const transactionController = new TransactionController(transactionService);
+const transactionRoutes = new TransactionRoutes(transactionController);
+
 app.use(API_V1_PATH, transactionRoutes.router);
 
-// Error handling - share logger instance
+// Error handling
 const errorHandler = new ErrorHandler(logger);
 app.use(errorHandler.handle);
 
@@ -65,11 +76,12 @@ export const startServer = (port: number = PORT): Server => {
     });
 
   // Graceful shutdown handler
-  const shutdown = (signal: string) => {
+  const shutdown = async (signal: string) => {
     logger.info(`${signal} received, shutting down gracefully`);
 
-    server.close(() => {
-      logger.info("Server closed, exiting process");
+    server.close(async () => {
+      await closePool();
+      logger.info("Server and database pool closed, exiting process");
       process.exit(0);
     });
 
@@ -78,7 +90,7 @@ export const startServer = (port: number = PORT): Server => {
     setTimeout(() => {
       logger.error("Forced shutdown due to timeout");
       process.exit(1);
-    }, timeout).unref(); // unref allows process to exit if this is the only thing keeping it alive
+    }, timeout).unref();
   };
 
   process.on("SIGTERM", () => shutdown("SIGTERM"));

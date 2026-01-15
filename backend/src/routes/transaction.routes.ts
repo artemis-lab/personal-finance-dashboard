@@ -2,7 +2,6 @@ import { Router } from "express";
 
 import { TRANSACTIONS_PATH } from "../constants";
 import { TransactionController } from "../controllers/transaction.controller";
-import type { ILogger } from "../logger";
 import { transactionsRateLimiter } from "../middleware/rate-limit.middleware";
 
 /**
@@ -10,11 +9,10 @@ import { transactionsRateLimiter } from "../middleware/rate-limit.middleware";
  */
 export class TransactionRoutes {
   router = Router();
-  private controller: TransactionController;
+  private transactionController: TransactionController;
 
-  constructor(controller?: TransactionController, logger?: ILogger) {
-    this.controller =
-      controller || new TransactionController(undefined, logger);
+  constructor(transactionController: TransactionController) {
+    this.transactionController = transactionController;
     this.initRoutes();
   }
 
@@ -22,7 +20,7 @@ export class TransactionRoutes {
     this.router.get(
       TRANSACTIONS_PATH,
       transactionsRateLimiter,
-      this.controller.getTransactions,
+      this.transactionController.getTransactions,
     );
   }
 }

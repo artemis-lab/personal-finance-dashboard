@@ -43,7 +43,7 @@ export interface SuccessResponse<T> {
 export interface TransactionListData {
   transactions: Transaction[];
   hasMore: boolean;
-  total?: number;
+  total: number;
 }
 
 export type TransactionListResponse = SuccessResponse<TransactionListData>;
