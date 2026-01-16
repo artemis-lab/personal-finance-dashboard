@@ -56,3 +56,15 @@ export interface TransactionListQuery {
   sortOrder: "asc" | "desc"; // Default: "desc"
   yearMonth?: string; // e.g., "2026-01"
 }
+
+// Update transaction category
+export interface UpdateTransactionCategoryData {
+  transaction: Transaction;
+}
+
+export interface UpdateTransactionCategoryRequest {
+  category: string;
+}
+
+export type UpdateTransactionCategoryResponse =
+  SuccessResponse<UpdateTransactionCategoryData>;

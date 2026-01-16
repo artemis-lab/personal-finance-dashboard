@@ -1,4 +1,5 @@
 import type {
+  Transaction,
   TransactionListData,
   TransactionListQuery,
 } from "../types/transaction.types";
@@ -14,4 +15,14 @@ export interface ITransactionService {
    * @returns Promise resolving to transaction list data with pagination info
    */
   getTransactions(query: TransactionListQuery): Promise<TransactionListData>;
+
+  /**
+   * Updates a transaction's category.
+   *
+   * @param id - The transaction ID (UUID)
+   * @param category - The new category name
+   * @returns Promise resolving to the updated transaction
+   * @throws NotFoundError if transaction doesn't exist
+   */
+  updateTransactionCategory(id: string, category: string): Promise<Transaction>;
 }

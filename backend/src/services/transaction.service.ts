@@ -1,7 +1,9 @@
+import { NotFoundError } from "../errors/errors";
 import type { ILogger } from "../logger";
 import { Logger } from "../logger";
 import type { ITransactionRepository } from "../repositories";
 import type {
+  Transaction,
   TransactionListData,
   TransactionListQuery,
 } from "../types/transaction.types";
@@ -44,5 +46,35 @@ export class TransactionService implements ITransactionService {
       hasMore,
       total,
     };
+  }
+
+  async updateTransactionCategory(
+    id: string,
+    category: string,
+  ): Promise<Transaction> {
+    const traceId = generateTraceId();
+    this.logger.info("Updating transaction category", {
+      traceId,
+      id,
+      category,
+    });
+
+    const transaction = await this.transactionRepository.updateCategory(
+      id,
+      category,
+    );
+
+    if (!transaction) {
+      this.logger.warn("Transaction not found", { traceId, id });
+      throw new NotFoundError(`Transaction with id ${id} not found`);
+    }
+
+    this.logger.info("Transaction category updated", {
+      traceId,
+      id,
+      category: transaction.category,
+    });
+
+    return transaction;
   }
 }

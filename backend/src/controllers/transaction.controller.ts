@@ -1,8 +1,15 @@
 import type { NextFunction, Request, Response } from "express";
 
 import type { ITransactionService } from "../services";
-import type { TransactionListResponse } from "../types/transaction.types";
-import { transactionListQuerySchema } from "../validators/transaction.validator";
+import type {
+  TransactionListResponse,
+  UpdateTransactionCategoryResponse,
+} from "../types/transaction.types";
+import {
+  transactionIdParamSchema,
+  transactionListQuerySchema,
+  updateTransactionCategorySchema,
+} from "../validators/transaction.validator";
 
 /**
  * Controller for handling transaction-related HTTP requests.
@@ -36,6 +43,24 @@ export class TransactionController {
       const result = await this.transactionService.getTransactions(query);
 
       response.status(200).json({ success: true, data: result });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  updateTransactionCategory = async (
+    request: Request,
+    response: Response<UpdateTransactionCategoryResponse>,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const { id } = transactionIdParamSchema.parse(request.params);
+      const { category } = updateTransactionCategorySchema.parse(request.body);
+
+      const transaction =
+        await this.transactionService.updateTransactionCategory(id, category);
+
+      response.status(200).json({ success: true, data: { transaction } });
     } catch (error) {
       next(error);
     }

@@ -87,4 +87,26 @@ export class TransactionRepository implements ITransactionRepository {
       total: parseInt(countResult.rows[0].total, 10),
     };
   }
+
+  async updateCategory(
+    id: string,
+    category: string,
+  ): Promise<Transaction | null> {
+    const query = `
+      UPDATE transactions
+      SET category = $1, category_source = 'user', updated_at = CURRENT_TIMESTAMP
+      WHERE id = $2
+      RETURNING amount, date, description, id, merchant, transaction_type,
+             category, category_source, account, balance, reference, transaction_method
+    `;
+
+    const result = await this.pool.query<TransactionRow>(query, [category, id]);
+    const row = result.rows[0];
+
+    if (!row) {
+      return null;
+    }
+
+    return rowToTransaction(row);
+  }
 }

@@ -22,4 +22,13 @@ export interface ITransactionRepository {
   findAll(
     query: TransactionListQuery,
   ): Promise<{ transactions: Transaction[]; total: number }>;
+
+  /**
+   * Updates a transaction's category.
+   *
+   * @param id - The transaction ID (UUID)
+   * @param category - The new category name
+   * @returns Promise containing the updated transaction or null if not found
+   */
+  updateCategory(id: string, category: string): Promise<Transaction | null>;
 }

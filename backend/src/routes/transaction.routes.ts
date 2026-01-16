@@ -22,5 +22,11 @@ export class TransactionRoutes {
       transactionsRateLimiter,
       this.transactionController.getTransactions,
     );
+
+    this.router.patch(
+      `${TRANSACTIONS_PATH}/:id/category`,
+      transactionsRateLimiter,
+      this.transactionController.updateTransactionCategory,
+    );
   }
 }

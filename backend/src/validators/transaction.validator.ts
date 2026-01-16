@@ -1,5 +1,23 @@
 import { z } from "zod";
 
+/**
+ * Schema for validating transaction ID path parameter.
+ *
+ * @property id - Expects a valid UUID string
+ */
+export const transactionIdParamSchema = z.object({
+  id: z.uuid("Invalid transaction ID format"),
+});
+
+/**
+ * Schema for validating transaction list query parameters.
+ *
+ * @property limit - Number of transactions to return (1-100, default: 30)
+ * @property offset - Number of transactions to skip (default: 0)
+ * @property sortBy - Field to sort by: "date" or "amount" (default: "date")
+ * @property sortOrder - Sort direction: "asc" or "desc" (default: "desc")
+ * @property yearMonth - Optional filter by month in "YYYY-MM" format
+ */
 export const transactionListQuerySchema = z.object({
   limit: z
     .string()
@@ -17,4 +35,13 @@ export const transactionListQuerySchema = z.object({
     .string()
     .regex(/^\d{4}-\d{2}$/, "yearMonth must be in format YYYY-MM")
     .optional(),
+});
+
+/**
+ * Schema for validating update transaction category request body.
+ *
+ * @property category - The new category name (1-100 characters)
+ */
+export const updateTransactionCategorySchema = z.object({
+  category: z.string().min(1, "category is required").max(100),
 });

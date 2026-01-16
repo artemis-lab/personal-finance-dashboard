@@ -294,7 +294,7 @@ curl http://localhost:3000/health
 
 ## Technical Details
 
-- **Architecture**: Layered architecture (Routes → Controllers → Services)
+- **Architecture**: Layered architecture (Routes → Controllers → Services → Repositories)
 - **Error Handling**: Custom error classes extending ApplicationError with HTTP status codes
 - **Dependency Injection**: Constructor-based DI for testability
 - **Code Quality**: ESLint + Prettier with automated formatting
