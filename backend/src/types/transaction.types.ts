@@ -68,3 +68,16 @@ export interface UpdateTransactionCategoryRequest {
 
 export type UpdateTransactionCategoryResponse =
   SuccessResponse<UpdateTransactionCategoryData>;
+
+// Batch update transaction category
+export interface BatchUpdateTransactionCategoryData {
+  transactions: Transaction[];
+}
+
+export interface BatchUpdateTransactionCategoryRequest {
+  ids: string[];
+  category: string;
+}
+
+export type BatchUpdateTransactionCategoryResponse =
+  SuccessResponse<BatchUpdateTransactionCategoryData>;

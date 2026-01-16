@@ -109,4 +109,25 @@ export class TransactionRepository implements ITransactionRepository {
 
     return rowToTransaction(row);
   }
+
+  async batchUpdateCategory(
+    ids: string[],
+    category: string,
+  ): Promise<Transaction[]> {
+    const placeholders = ids.map((_, i) => `$${i + 2}`).join(", ");
+    const query = `
+      UPDATE transactions
+      SET category = $1, category_source = 'user', updated_at = CURRENT_TIMESTAMP
+      WHERE id IN (${placeholders})
+      RETURNING amount, date, description, id, merchant, transaction_type,
+             category, category_source, account, balance, reference, transaction_method
+    `;
+
+    const result = await this.pool.query<TransactionRow>(query, [
+      category,
+      ...ids,
+    ]);
+
+    return result.rows.map(rowToTransaction);
+  }
 }

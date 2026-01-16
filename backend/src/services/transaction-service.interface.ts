@@ -1,4 +1,5 @@
 import type {
+  BatchUpdateTransactionCategoryData,
   Transaction,
   TransactionListData,
   TransactionListQuery,
@@ -25,4 +26,17 @@ export interface ITransactionService {
    * @throws NotFoundError if transaction doesn't exist
    */
   updateTransactionCategory(id: string, category: string): Promise<Transaction>;
+
+  /**
+   * Updates multiple transactions' categories in a single operation.
+   *
+   * @param ids - Array of transaction IDs (UUIDs)
+   * @param category - The new category name
+   * @returns Promise resolving to updated count and transactions
+   * @throws NotFoundError if no transactions were found for any of the IDs
+   */
+  batchUpdateTransactionCategory(
+    ids: string[],
+    category: string,
+  ): Promise<BatchUpdateTransactionCategoryData>;
 }

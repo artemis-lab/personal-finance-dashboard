@@ -2,10 +2,12 @@ import type { NextFunction, Request, Response } from "express";
 
 import type { ITransactionService } from "../services";
 import type {
+  BatchUpdateTransactionCategoryResponse,
   TransactionListResponse,
   UpdateTransactionCategoryResponse,
 } from "../types/transaction.types";
 import {
+  batchUpdateTransactionCategorySchema,
   transactionIdParamSchema,
   transactionListQuerySchema,
   updateTransactionCategorySchema,
@@ -48,6 +50,15 @@ export class TransactionController {
     }
   };
 
+  /**
+   * Updates a transaction's category.
+   *
+   * @param request - Express request with query parameter and request body:
+   *   - `id` - The transaction ID (UUID)
+   *   - `category` -  The new category name
+   * @param response - Express response containing the updated transaction
+   * @param next - Express next function for error handling
+   */
   updateTransactionCategory = async (
     request: Request,
     response: Response<UpdateTransactionCategoryResponse>,
@@ -61,6 +72,37 @@ export class TransactionController {
         await this.transactionService.updateTransactionCategory(id, category);
 
       response.status(200).json({ success: true, data: { transaction } });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  /**
+   * Updates multiple transactions' categories in a single operation.
+   *
+   * @param request - Express request with request body:
+   *   - `ids` - Array of transaction IDs (UUIDs)
+   *   - `category` -  The new category name
+   * @param response - Express response containing the updated transaction list
+   * @param next - Express next function for error handling
+   */
+  batchUpdateTransactionCategory = async (
+    request: Request,
+    response: Response<BatchUpdateTransactionCategoryResponse>,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const { ids, category } = batchUpdateTransactionCategorySchema.parse(
+        request.body,
+      );
+
+      const result =
+        await this.transactionService.batchUpdateTransactionCategory(
+          ids,
+          category,
+        );
+
+      response.status(200).json({ success: true, data: result });
     } catch (error) {
       next(error);
     }

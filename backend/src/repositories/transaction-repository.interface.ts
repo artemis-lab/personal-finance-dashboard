@@ -31,4 +31,13 @@ export interface ITransactionRepository {
    * @returns Promise containing the updated transaction or null if not found
    */
   updateCategory(id: string, category: string): Promise<Transaction | null>;
+
+  /**
+   * Updates multiple transactions' categories in a single operation.
+   *
+   * @param ids - Array of transaction IDs (UUIDs)
+   * @param category - The new category name
+   * @returns Promise containing array of updated transactions
+   */
+  batchUpdateCategory(ids: string[], category: string): Promise<Transaction[]>;
 }

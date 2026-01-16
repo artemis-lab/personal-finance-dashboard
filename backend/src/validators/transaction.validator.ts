@@ -45,3 +45,17 @@ export const transactionListQuerySchema = z.object({
 export const updateTransactionCategorySchema = z.object({
   category: z.string().min(1, "category is required").max(100),
 });
+
+/**
+ * Schema for validating batch update transaction category request body.
+ *
+ * @property ids - Array of transaction IDs (UUIDs), 1-100 items
+ * @property category - The new category name (1-100 characters)
+ */
+export const batchUpdateTransactionCategorySchema = z.object({
+  ids: z
+    .array(z.uuid("Invalid transaction ID format"))
+    .min(1, "At least one transaction ID is required")
+    .max(100, "Maximum 100 transactions per batch"),
+  category: z.string().min(1, "category is required").max(100),
+});

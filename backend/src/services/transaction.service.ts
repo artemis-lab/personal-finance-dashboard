@@ -3,6 +3,7 @@ import type { ILogger } from "../logger";
 import { Logger } from "../logger";
 import type { ITransactionRepository } from "../repositories";
 import type {
+  BatchUpdateTransactionCategoryData,
   Transaction,
   TransactionListData,
   TransactionListQuery,
@@ -76,5 +77,38 @@ export class TransactionService implements ITransactionService {
     });
 
     return transaction;
+  }
+
+  async batchUpdateTransactionCategory(
+    ids: string[],
+    category: string,
+  ): Promise<BatchUpdateTransactionCategoryData> {
+    const traceId = generateTraceId();
+    this.logger.info("Batch updating transaction categories", {
+      traceId,
+      count: ids.length,
+      category,
+    });
+
+    const transactions = await this.transactionRepository.batchUpdateCategory(
+      ids,
+      category,
+    );
+
+    if (transactions.length === 0) {
+      this.logger.warn("No transactions found for batch update", {
+        traceId,
+        ids,
+      });
+      throw new NotFoundError("No transactions found for the provided IDs");
+    }
+
+    this.logger.info("Batch transaction categories updated", {
+      traceId,
+      requestedCount: ids.length,
+      updatedCount: transactions.length,
+    });
+
+    return { transactions };
   }
 }

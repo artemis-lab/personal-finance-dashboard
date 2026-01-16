@@ -24,6 +24,12 @@ export class TransactionRoutes {
     );
 
     this.router.patch(
+      `${TRANSACTIONS_PATH}/category/batch`,
+      transactionsRateLimiter,
+      this.transactionController.batchUpdateTransactionCategory,
+    );
+
+    this.router.patch(
       `${TRANSACTIONS_PATH}/:id/category`,
       transactionsRateLimiter,
       this.transactionController.updateTransactionCategory,
