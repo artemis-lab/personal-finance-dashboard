@@ -72,6 +72,9 @@ export type UpdateTransactionCategoryResponse =
 // Batch update transaction category
 export interface BatchUpdateTransactionCategoryData {
   transactions: Transaction[];
+  failedIds: string[];
+  requestedCount: number;
+  updatedCount: number;
 }
 
 export interface BatchUpdateTransactionCategoryRequest {

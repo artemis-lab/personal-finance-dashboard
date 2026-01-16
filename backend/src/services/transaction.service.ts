@@ -103,12 +103,19 @@ export class TransactionService implements ITransactionService {
       throw new NotFoundError("No transactions found for the provided IDs");
     }
 
+    const transactionIds = new Set(transactions.map((t) => t.id));
+
     this.logger.info("Batch transaction categories updated", {
       traceId,
       requestedCount: ids.length,
       updatedCount: transactions.length,
     });
 
-    return { transactions };
+    return {
+      transactions,
+      failedIds: ids.filter((id) => !transactionIds.has(id)),
+      requestedCount: ids.length,
+      updatedCount: transactions.length,
+    };
   }
 }
