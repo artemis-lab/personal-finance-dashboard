@@ -1,9 +1,6 @@
 import { Pool } from "pg";
 
-import type {
-  Transaction,
-  TransactionListQuery,
-} from "../types/transaction.types";
+import type { Transaction, TransactionListQuery } from "../types";
 import type { ITransactionRepository } from "./transaction-repository.interface";
 
 interface TransactionRow {

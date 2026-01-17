@@ -11,14 +11,14 @@ import {
   PORT,
   REQUEST_BODY_LIMIT,
 } from "./constants";
-import { TransactionController } from "./controllers/transaction.controller";
+import { ReportController, TransactionController } from "./controllers";
 import { Logger } from "./logger";
 import { ErrorHandler } from "./middleware/error.middleware";
 import { globalRateLimiter } from "./middleware/rate-limit.middleware";
-import { TransactionRepository } from "./repositories";
-import { TransactionRoutes } from "./routes/transaction.routes";
-import { TransactionService } from "./services";
-import { HealthCheckResponse } from "./types/transaction.types";
+import { ReportRepository, TransactionRepository } from "./repositories";
+import { ReportRoutes, TransactionRoutes } from "./routes";
+import { ReportService, TransactionService } from "./services";
+import { HealthCheckResponse } from "./types";
 
 const logger = new Logger();
 
@@ -51,7 +51,13 @@ const transactionService = new TransactionService(
 const transactionController = new TransactionController(transactionService);
 const transactionRoutes = new TransactionRoutes(transactionController);
 
+const reportRepository = new ReportRepository(pool);
+const reportService = new ReportService(reportRepository, logger);
+const reportController = new ReportController(reportService);
+const reportRoutes = new ReportRoutes(reportController);
+
 app.use(API_V1_PATH, transactionRoutes.router);
+app.use(API_V1_PATH, reportRoutes.router);
 
 // Error handling
 const errorHandler = new ErrorHandler(logger);

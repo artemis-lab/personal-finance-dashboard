@@ -4,7 +4,7 @@ import { ZodError } from "zod";
 import { ApplicationError } from "../errors/errors";
 import type { ILogger } from "../logger";
 import { Logger } from "../logger";
-import type { ErrorResponse } from "../types/transaction.types";
+import type { ErrorResponse } from "../types";
 
 /**
  * Centralized error handling middleware for the application.

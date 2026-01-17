@@ -2,7 +2,11 @@ import { Router } from "express";
 
 import { TRANSACTIONS_PATH } from "../constants";
 import { TransactionController } from "../controllers/transaction.controller";
-import { transactionsRateLimiter } from "../middleware/rate-limit.middleware";
+import {
+  batchUpdateTransactionCategoryRateLimiter,
+  transactionsRateLimiter,
+  updateTransactionCategoryRateLimiter,
+} from "../middleware/rate-limit.middleware";
 
 /**
  * Configures routes for transaction-related endpoints.
@@ -25,13 +29,13 @@ export class TransactionRoutes {
 
     this.router.patch(
       `${TRANSACTIONS_PATH}/category/batch`,
-      transactionsRateLimiter,
+      batchUpdateTransactionCategoryRateLimiter,
       this.transactionController.batchUpdateTransactionCategory,
     );
 
     this.router.patch(
       `${TRANSACTIONS_PATH}/:id/category`,
-      transactionsRateLimiter,
+      updateTransactionCategoryRateLimiter,
       this.transactionController.updateTransactionCategory,
     );
   }

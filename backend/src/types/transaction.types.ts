@@ -1,4 +1,7 @@
-// Transaction type
+// Transaction types
+
+import type { SuccessResponse } from "./common.types";
+
 export interface Transaction {
   // Core fields
   amount: number; // always positive
@@ -15,29 +18,8 @@ export interface Transaction {
   // Optional metadata from CSV
   account?: string;
   balance?: number;
-  reference?: string; // External reference from CSV (transaction ID, etc.)
+  reference?: string; // External reference from CSV (e.g., transaction ID)
   transactionMethod?: string; // e.g., "Purchase", "ATM", "ACH"
-}
-
-// Request/Response types
-export interface ErrorResponse {
-  success: false;
-  error: string;
-  message: string;
-  details?: Array<{
-    field: string;
-    message: string;
-  }>;
-}
-
-export interface HealthCheckResponse {
-  status: "ok";
-  timestamp: string;
-}
-
-export interface SuccessResponse<T> {
-  success: true;
-  data: T;
 }
 
 export interface TransactionListData {

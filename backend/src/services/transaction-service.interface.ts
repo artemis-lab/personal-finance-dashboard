@@ -3,7 +3,7 @@ import type {
   Transaction,
   TransactionListData,
   TransactionListQuery,
-} from "../types/transaction.types";
+} from "../types";
 
 /**
  * Service interface for transaction operations.
@@ -32,7 +32,7 @@ export interface ITransactionService {
    *
    * @param ids - Array of transaction IDs (UUIDs)
    * @param category - The new category name
-   * @returns Promise resolving to updated count and transactions
+   * @returns Promise resolving to an object containing updated transactions, failed IDs, and counts
    * @throws NotFoundError if no transactions were found for any of the IDs
    */
   batchUpdateTransactionCategory(

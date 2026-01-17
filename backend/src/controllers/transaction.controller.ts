@@ -5,13 +5,13 @@ import type {
   BatchUpdateTransactionCategoryResponse,
   TransactionListResponse,
   UpdateTransactionCategoryResponse,
-} from "../types/transaction.types";
+} from "../types";
 import {
   batchUpdateTransactionCategorySchema,
   transactionIdParamSchema,
   transactionListQuerySchema,
   updateTransactionCategorySchema,
-} from "../validators/transaction.validator";
+} from "../validators";
 
 /**
  * Controller for handling transaction-related HTTP requests.

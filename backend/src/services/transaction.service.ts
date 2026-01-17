@@ -7,7 +7,7 @@ import type {
   Transaction,
   TransactionListData,
   TransactionListQuery,
-} from "../types/transaction.types";
+} from "../types";
 import { generateTraceId } from "../utils/helpers";
 import type { ITransactionService } from "./transaction-service.interface";
 

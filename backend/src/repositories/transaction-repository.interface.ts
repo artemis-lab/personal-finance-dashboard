@@ -1,7 +1,4 @@
-import type {
-  Transaction,
-  TransactionListQuery,
-} from "../types/transaction.types";
+import type { Transaction, TransactionListQuery } from "../types";
 
 /**
  * Repository interface for transaction data access.
@@ -17,7 +14,7 @@ export interface ITransactionRepository {
    * @param query.sortBy - Field to sort by ("date" or "amount")
    * @param query.sortOrder - Sort direction ("asc" or "desc")
    * @param query.yearMonth - Optional filter by year-month (format: "YYYY-MM")
-   * @returns Promise containing array of transactions and total count
+   * @returns Promise resolving to array of transactions and total count
    */
   findAll(
     query: TransactionListQuery,
@@ -28,7 +25,7 @@ export interface ITransactionRepository {
    *
    * @param id - The transaction ID (UUID)
    * @param category - The new category name
-   * @returns Promise containing the updated transaction or null if not found
+   * @returns Promise resolving to the updated transaction or null if not found
    */
   updateCategory(id: string, category: string): Promise<Transaction | null>;
 
@@ -37,7 +34,7 @@ export interface ITransactionRepository {
    *
    * @param ids - Array of transaction IDs (UUIDs)
    * @param category - The new category name
-   * @returns Promise containing array of updated transactions
+   * @returns Promise resolving to array of updated transactions
    */
   batchUpdateCategory(ids: string[], category: string): Promise<Transaction[]>;
 }
