@@ -1,0 +1,54 @@
+{
+  "name": "finance-dashboard",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "author": "artemis-lab",
+  "license": "MIT",
+  "description": "A frontend application that allows users to import transaction history, view categorized transactions, and generate reports",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "build": "tsc -b && vite build",
+    "clean": "rm -rf dist",
+    "dev": "vite",
+    "format": "prettier --write \"**/*.{js,ts,tsx}\"",
+    "format:check": "prettier --check \"**/*.{js,ts,tsx}\"",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "preview": "vite preview",
+    "type-check": "tsc --project tsconfig.app.json --noEmit"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "4.1.18",
+    "lucide-react": "0.561.0",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-router-dom": "7.10.1",
+    "tailwindcss": "4.1.18"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.2",
+    "@testing-library/jest-dom": "6.9.1",
+    "@testing-library/react": "16.3.1",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "5.1.2",
+    "@vitest/coverage-v8": "4.0.16",
+    "@vitest/ui": "4.0.16",
+    "eslint": "9.39.2",
+    "eslint-plugin-react": "7.37.5",
+    "eslint-plugin-react-hooks": "7.0.1",
+    "eslint-plugin-react-refresh": "0.4.25",
+    "eslint-plugin-simple-import-sort": "12.1.1",
+    "globals": "16.5.0",
+    "jsdom": "27.4.0",
+    "prettier": "3.7.4",
+    "prettier-plugin-tailwindcss": "0.7.2",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.50.0",
+    "vite": "7.3.0",
+    "vitest": "4.0.16"
+  }
+}
