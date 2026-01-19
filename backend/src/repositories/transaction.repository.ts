@@ -1,6 +1,11 @@
 import { Pool } from "pg";
 
-import type { Transaction, TransactionListQuery } from "../types";
+import type {
+  CategorySource,
+  Transaction,
+  TransactionListQuery,
+  TransactionType,
+} from "../types";
 import type { ITransactionRepository } from "./transaction-repository.interface";
 
 interface TransactionRow {
@@ -9,9 +14,9 @@ interface TransactionRow {
   description: string;
   id: string;
   merchant: string;
-  transaction_type: "credit" | "debit";
+  transaction_type: TransactionType;
   category: string;
-  category_source: "ai" | "user";
+  category_source: CategorySource;
   account: string | null;
   balance: string | null;
   reference: string | null;

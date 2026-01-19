@@ -2,6 +2,10 @@
 
 import type { SuccessResponse } from "./common.types";
 
+export type CategorySource = "ai" | "user";
+
+export type TransactionType = "credit" | "debit"; // credit = income, debit = expense
+
 export interface Transaction {
   // Core fields
   amount: number; // always positive
@@ -9,11 +13,11 @@ export interface Transaction {
   description: string;
   id: string; // UUID, backend-generated
   merchant: string;
-  transactionType: "credit" | "debit"; // credit = income, debit = expense
+  transactionType: TransactionType;
 
   // AI-based categorization
   category: string;
-  categorySource: "ai" | "user";
+  categorySource: CategorySource;
 
   // Optional metadata from CSV
   account?: string;
