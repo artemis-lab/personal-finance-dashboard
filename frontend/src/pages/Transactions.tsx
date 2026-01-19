@@ -118,7 +118,7 @@ const Transactions = () => {
           </div>
         ) : transactions.length === 0 ? (
           <div className="flex h-full items-center justify-center rounded-lg border border-gray-200 bg-white">
-            <Text c="gray.6">No transactions found</Text>
+            <Text c="gray">No transactions found</Text>
           </div>
         ) : (
           <TransactionTable

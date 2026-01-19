@@ -1,4 +1,9 @@
-import type { TransactionListData, TransactionListQuery } from "../types";
+import type {
+  TransactionListData,
+  TransactionListQuery,
+  UpdateTransactionCategoryData,
+  UpdateTransactionCategoryRequest,
+} from "../types";
 import { apiClient } from "./client";
 
 const TRANSACTIONS_PATH = "/transactions";
@@ -28,4 +33,17 @@ export async function fetchTransactions(
   const endpoint = `${TRANSACTIONS_PATH}${queryString ? `?${queryString}` : ""}`;
 
   return apiClient<TransactionListData>(endpoint);
+}
+
+export async function updateTransactionCategory(
+  id: string,
+  request: UpdateTransactionCategoryRequest,
+): Promise<UpdateTransactionCategoryData> {
+  return apiClient<UpdateTransactionCategoryData>(
+    `${TRANSACTIONS_PATH}/${id}/category`,
+    {
+      method: "PATCH",
+      body: JSON.stringify(request),
+    },
+  );
 }

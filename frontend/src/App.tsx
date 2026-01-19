@@ -1,4 +1,5 @@
 import { MantineProvider } from "@mantine/core";
+import { Notifications } from "@mantine/notifications";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
@@ -17,6 +18,7 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <MantineProvider>
+        <Notifications />
         <BrowserRouter>
           <Routes>
             <Route element={<Layout />}>

@@ -2,9 +2,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 
 import { fetchTransactions } from "../api";
 import type { TransactionListQuery } from "../types";
-
-const DEFAULT_LIMIT = 30;
-const TRANSACTIONS_QUERY_KEY = "transactions";
+import { DEFAULT_LIMIT, TRANSACTIONS_QUERY_KEY } from "./constants";
 
 export type UseTransactionsOptions = Omit<TransactionListQuery, "offset">;
 

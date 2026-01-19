@@ -1,3 +1,5 @@
+// Transaction types
+
 export type CategorySource = "ai" | "user";
 
 export type TransactionType = "credit" | "debit";
@@ -23,10 +25,20 @@ export interface TransactionListData {
   total: number;
 }
 
+// Query parameters for transaction list
 export interface TransactionListQuery {
   limit?: number;
   offset?: number;
   sortBy?: "date" | "amount";
   sortOrder?: "asc" | "desc";
   yearMonth?: string;
+}
+
+// Update transaction category
+export interface UpdateTransactionCategoryData {
+  transaction: Transaction;
+}
+
+export interface UpdateTransactionCategoryRequest {
+  category: string;
 }

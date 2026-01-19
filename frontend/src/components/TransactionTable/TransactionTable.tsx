@@ -1,10 +1,13 @@
-import { Box, Table, Text } from "@mantine/core";
+import { ActionIcon, Box, Table, Text } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { ArrowDown, ArrowUp } from "lucide-react";
-import { type JSX, useCallback, useRef } from "react";
+import { ArrowDown, ArrowUp, Pencil } from "lucide-react";
+import { type JSX, useCallback, useRef, useState } from "react";
 
+import { useUpdateTransactionCategory } from "../../hooks";
 import type { Transaction, TransactionListQuery } from "../../types";
 import { formatAmount, formatDate } from "../../utils";
+import CategoryEditModal from "./CategoryEditModal";
 
 const OVERSCAN = 10;
 const ROW_HEIGHT = 52;
@@ -31,6 +34,10 @@ const TransactionTable = ({
   onSort,
 }: TransactionTableProps) => {
   const parentRef = useRef<HTMLDivElement>(null);
+  const [editingTransaction, setEditingTransaction] =
+    useState<Transaction | null>(null);
+
+  const { mutate: updateCategory } = useUpdateTransactionCategory();
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const virtualizer = useVirtualizer({
@@ -69,6 +76,36 @@ const TransactionTable = ({
     virtualizer.scrollToIndex(lastIndex, { align: "start" });
   }, [transactions.length, onLoadMore, virtualizer]);
 
+  const handleEditCategory = (transaction: Transaction) => {
+    setEditingTransaction(transaction);
+  };
+
+  const handleCloseModal = () => {
+    setEditingTransaction(null);
+  };
+
+  const handleSubmitCategory = (category: string) => {
+    if (!editingTransaction) {
+      return;
+    }
+    const transactionId = editingTransaction.id;
+    setEditingTransaction(null); // close modal immediately
+    updateCategory(
+      { id: transactionId, category },
+      {
+        onError: (error) => {
+          notifications.show({
+            color: "red",
+            position: "top-right",
+            message:
+              error instanceof Error ? error.message : "An error occurred",
+            title: "Error updating category",
+          });
+        },
+      },
+    );
+  };
+
   return (
     <Box className="flex h-full flex-col overflow-hidden rounded-lg border border-gray-200 bg-white">
       <Table>
@@ -78,8 +115,10 @@ const TransactionTable = ({
               className="w-28 cursor-pointer"
               onClick={() => handleHeaderClick("date")}
             >
-              Date
-              <SortIcon column="date" />
+              <span className="inline-flex items-center">
+                Date
+                <SortIcon column="date" />
+              </span>
             </Table.Th>
             <Table.Th className="w-48">Description</Table.Th>
             <Table.Th className="w-32">Category</Table.Th>
@@ -88,8 +127,10 @@ const TransactionTable = ({
               className="w-28 cursor-pointer"
               onClick={() => handleHeaderClick("amount")}
             >
-              Amount
-              <SortIcon column="amount" />
+              <span className="inline-flex items-center">
+                Amount
+                <SortIcon column="amount" />
+              </span>
             </Table.Th>
           </Table.Tr>
         </Table.Thead>
@@ -125,15 +166,25 @@ const TransactionTable = ({
                       </Text>
                     </Table.Td>
                     <Table.Td className="w-32">
-                      <span
-                        className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
-                          transaction.categorySource === "user"
-                            ? "bg-blue-100 text-blue-800"
-                            : "bg-green-100 text-green-800"
-                        }`}
-                      >
-                        {transaction.category}
-                      </span>
+                      <div className="flex items-center gap-1">
+                        <span
+                          className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
+                            transaction.categorySource === "user"
+                              ? "bg-blue-100 text-blue-800"
+                              : "bg-green-100 text-green-800"
+                          }`}
+                        >
+                          {transaction.category}
+                        </span>
+                        <ActionIcon
+                          color="gray"
+                          size="xs"
+                          variant="subtle"
+                          onClick={() => handleEditCategory(transaction)}
+                        >
+                          <Pencil className="h-3 w-3" />
+                        </ActionIcon>
+                      </div>
                     </Table.Td>
                     <Table.Td className="w-36">
                       <Text lineClamp={1} size="sm">
@@ -165,7 +216,7 @@ const TransactionTable = ({
       </div>
 
       <div className="flex h-12 items-center border-t border-gray-200 px-4">
-        <div className="flex-1" />
+        <div className="flex flex-1"></div>
         <div className="flex-1 text-center">
           {isLoading && (
             <Text c="gray" size="sm">
@@ -186,12 +237,21 @@ const TransactionTable = ({
           )}
         </div>
         <div className="flex flex-1 justify-end">
-          <Text c="gray.6" size="sm">
+          <Text c="gray" size="sm">
             Loaded {transactions.length} of {total}{" "}
             {total === 1 ? "transaction" : "transactions"}
           </Text>
         </div>
       </div>
+
+      {editingTransaction && (
+        <CategoryEditModal
+          category={editingTransaction.category}
+          opened={editingTransaction !== null}
+          onClose={handleCloseModal}
+          onSubmit={handleSubmitCategory}
+        />
+      )}
     </Box>
   );
 };

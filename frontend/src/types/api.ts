@@ -1,3 +1,5 @@
+// Common response types
+
 export interface ErrorResponse {
   success: false;
   error: string;
