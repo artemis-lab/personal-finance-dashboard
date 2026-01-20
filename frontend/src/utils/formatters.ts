@@ -8,8 +8,14 @@ export const formatAmount = (amount: number, type: TransactionType): string => {
   return type === "credit" ? `+${formatted}` : `-${formatted}`;
 };
 
+export const formatCurrency = (amount: number): string => {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(amount);
+};
+
 export const formatDate = (dateString: string): string => {
-  // Parse YYYY-MM-DD manually to avoid timezone issues
   const parts = dateString.split("-");
   const year = Number(parts[0]);
   const month = Number(parts[1]);
@@ -20,4 +26,8 @@ export const formatDate = (dateString: string): string => {
     month: "short",
     day: "numeric",
   });
+};
+
+export const formatPercentage = (percentage: number): string => {
+  return `${percentage.toFixed(1)}%`;
 };

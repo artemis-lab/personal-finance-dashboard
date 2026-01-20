@@ -291,8 +291,8 @@ const TransactionTable = ({
                         size="sm"
                         c={
                           transaction.transactionType === "credit"
-                            ? "green.9"
-                            : "red.9"
+                            ? "green.7"
+                            : "red.7"
                         }
                       >
                         {formatAmount(

@@ -2,7 +2,11 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 
 import { fetchTransactions } from "../api";
 import type { TransactionListQuery } from "../types";
-import { DEFAULT_LIMIT, TRANSACTIONS_QUERY_KEY } from "./constants";
+import {
+  DEFAULT_LIMIT,
+  STALE_TIME_MS,
+  TRANSACTIONS_QUERY_KEY,
+} from "./constants";
 
 export type UseTransactionsOptions = Omit<TransactionListQuery, "offset">;
 
@@ -26,6 +30,6 @@ export const useTransactions = (options: UseTransactionsOptions = {}) => {
       }
       return allPages.length * limit;
     },
-    staleTime: 30_000,
+    staleTime: STALE_TIME_MS,
   });
 };

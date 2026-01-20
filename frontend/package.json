@@ -21,6 +21,7 @@
     "type-check": "tsc --project tsconfig.app.json --noEmit"
   },
   "dependencies": {
+    "@mantine/charts": "8.3.12",
     "@mantine/core": "8.3.12",
     "@mantine/dates": "8.3.12",
     "@mantine/hooks": "8.3.12",
@@ -33,6 +34,7 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-router-dom": "7.10.1",
+    "recharts": "3.6.0",
     "tailwindcss": "4.1.18"
   },
   "devDependencies": {
