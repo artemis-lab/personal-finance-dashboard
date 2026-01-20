@@ -1,6 +1,6 @@
-import { Alert, Loader, Select, Text, Title } from "@mantine/core";
+import { ActionIcon, Alert, Loader, Select, Text, Title } from "@mantine/core";
 import { MonthPickerInput } from "@mantine/dates";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, RefreshCw } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 
 import { ApiError } from "../api";
@@ -18,9 +18,11 @@ const Transactions = () => {
     data,
     isLoading,
     isFetchingNextPage,
+    isRefetching,
     error,
     hasNextPage,
     fetchNextPage,
+    refetch,
   } = useTransactions(options);
 
   const transactions = useMemo(() => {
@@ -102,6 +104,16 @@ const Transactions = () => {
           ]}
           onChange={handleSortOrderChange}
         />
+        <ActionIcon
+          aria-label="Reload transactions"
+          className="mt-6"
+          loading={isRefetching}
+          size="lg"
+          variant="light"
+          onClick={() => refetch()}
+        >
+          <RefreshCw size={18} />
+        </ActionIcon>
       </div>
       <div className="min-h-0 flex-1">
         {error ? (
