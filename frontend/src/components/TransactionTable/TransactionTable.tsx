@@ -1,10 +1,13 @@
-import { ActionIcon, Box, Table, Text } from "@mantine/core";
+import { ActionIcon, Box, Button, Checkbox, Table, Text } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { ArrowDown, ArrowUp, Pencil } from "lucide-react";
+import { ArrowDown, ArrowUp, Loader2, Pencil } from "lucide-react";
 import { type JSX, useCallback, useRef, useState } from "react";
 
-import { useUpdateTransactionCategory } from "../../hooks";
+import {
+  useBatchUpdateTransactionCategory,
+  useUpdateTransactionCategory,
+} from "../../hooks";
 import type { Transaction, TransactionListQuery } from "../../types";
 import { formatAmount, formatDate } from "../../utils";
 import CategoryEditModal from "./CategoryEditModal";
@@ -36,8 +39,14 @@ const TransactionTable = ({
   const parentRef = useRef<HTMLDivElement>(null);
   const [editingTransaction, setEditingTransaction] =
     useState<Transaction | null>(null);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [isBatchEditOpen, setIsBatchEditOpen] = useState(false);
+  const [pendingUpdateIds, setPendingUpdateIds] = useState<Set<string>>(
+    new Set(),
+  );
 
   const { mutate: updateCategory } = useUpdateTransactionCategory();
+  const { mutate: batchUpdateCategory } = useBatchUpdateTransactionCategory();
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const virtualizer = useVirtualizer({
@@ -84,12 +93,17 @@ const TransactionTable = ({
     setEditingTransaction(null);
   };
 
+  const handleCloseBatchModal = () => {
+    setIsBatchEditOpen(false);
+  };
+
   const handleSubmitCategory = (category: string) => {
     if (!editingTransaction) {
       return;
     }
     const transactionId = editingTransaction.id;
     setEditingTransaction(null); // close modal immediately
+    setPendingUpdateIds((prev) => new Set(prev).add(transactionId));
     updateCategory(
       { id: transactionId, category },
       {
@@ -102,15 +116,84 @@ const TransactionTable = ({
             title: "Error updating category",
           });
         },
+        onSettled: () => {
+          setPendingUpdateIds((prev) => {
+            const next = new Set(prev);
+            next.delete(transactionId);
+            return next;
+          });
+        },
       },
     );
   };
+
+  const handleBatchSubmitCategory = (category: string) => {
+    const ids = Array.from(selectedIds);
+    setIsBatchEditOpen(false); // close modal immediately
+    setSelectedIds(new Set());
+    setPendingUpdateIds((prev) => new Set([...prev, ...ids]));
+    batchUpdateCategory(
+      { ids, category },
+      {
+        onError: (error) => {
+          notifications.show({
+            color: "red",
+            position: "top-right",
+            message:
+              error instanceof Error ? error.message : "An error occurred",
+            title: "Error updating categories",
+          });
+        },
+        onSettled: () => {
+          setPendingUpdateIds((prev) => {
+            const next = new Set(prev);
+            for (const id of ids) {
+              next.delete(id);
+            }
+            return next;
+          });
+        },
+      },
+    );
+  };
+
+  const handleToggleSelect = (id: string) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  };
+
+  const handleToggleSelectAll = () => {
+    if (selectedIds.size === transactions.length) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(transactions.map((t) => t.id)));
+    }
+  };
+
+  const isAllSelected =
+    transactions.length > 0 && selectedIds.size === transactions.length;
+  const isIndeterminate =
+    selectedIds.size > 0 && selectedIds.size < transactions.length;
 
   return (
     <Box className="flex h-full flex-col overflow-hidden rounded-lg border border-gray-200 bg-white">
       <Table>
         <Table.Thead className="bg-gray-50">
           <Table.Tr>
+            <Table.Th className="w-10">
+              <Checkbox
+                checked={isAllSelected}
+                indeterminate={isIndeterminate}
+                onChange={handleToggleSelectAll}
+              />
+            </Table.Th>
             <Table.Th
               className="w-28 cursor-pointer"
               onClick={() => handleHeaderClick("date")}
@@ -148,6 +231,7 @@ const TransactionTable = ({
                 if (!transaction) {
                   return null;
                 }
+                const isPending = pendingUpdateIds.has(transaction.id);
                 return (
                   <Table.Tr
                     key={transaction.id}
@@ -157,6 +241,12 @@ const TransactionTable = ({
                       transform: `translateY(${virtualRow.start}px)`,
                     }}
                   >
+                    <Table.Td className="w-10">
+                      <Checkbox
+                        checked={selectedIds.has(transaction.id)}
+                        onChange={() => handleToggleSelect(transaction.id)}
+                      />
+                    </Table.Td>
                     <Table.Td className="w-28">
                       <Text size="sm">{formatDate(transaction.date)}</Text>
                     </Table.Td>
@@ -176,14 +266,18 @@ const TransactionTable = ({
                         >
                           {transaction.category}
                         </span>
-                        <ActionIcon
-                          color="gray"
-                          size="xs"
-                          variant="subtle"
-                          onClick={() => handleEditCategory(transaction)}
-                        >
-                          <Pencil className="h-3 w-3" />
-                        </ActionIcon>
+                        {isPending ? (
+                          <Loader2 className="h-3 w-3 animate-spin text-gray-500" />
+                        ) : (
+                          <ActionIcon
+                            color="gray"
+                            size="xs"
+                            variant="subtle"
+                            onClick={() => handleEditCategory(transaction)}
+                          >
+                            <Pencil className="h-3 w-3" />
+                          </ActionIcon>
+                        )}
                       </div>
                     </Table.Td>
                     <Table.Td className="w-36">
@@ -216,7 +310,18 @@ const TransactionTable = ({
       </div>
 
       <div className="flex h-12 items-center border-t border-gray-200 px-4">
-        <div className="flex flex-1"></div>
+        <div className="flex flex-1 items-center gap-2">
+          {selectedIds.size > 0 && (
+            <>
+              <Button size="xs" onClick={() => setIsBatchEditOpen(true)}>
+                Update category
+              </Button>
+              <Text c="gray" size="sm">
+                {selectedIds.size} selected
+              </Text>
+            </>
+          )}
+        </div>
         <div className="flex-1 text-center">
           {isLoading && (
             <Text c="gray" size="sm">
@@ -250,6 +355,14 @@ const TransactionTable = ({
           opened={editingTransaction !== null}
           onClose={handleCloseModal}
           onSubmit={handleSubmitCategory}
+        />
+      )}
+
+      {isBatchEditOpen && (
+        <CategoryEditModal
+          opened={isBatchEditOpen}
+          onClose={handleCloseBatchModal}
+          onSubmit={handleBatchSubmitCategory}
         />
       )}
     </Box>

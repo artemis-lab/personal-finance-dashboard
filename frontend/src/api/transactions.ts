@@ -1,4 +1,6 @@
 import type {
+  BatchUpdateTransactionCategoryData,
+  BatchUpdateTransactionCategoryRequest,
   TransactionListData,
   TransactionListQuery,
   UpdateTransactionCategoryData,
@@ -41,6 +43,18 @@ export async function updateTransactionCategory(
 ): Promise<UpdateTransactionCategoryData> {
   return apiClient<UpdateTransactionCategoryData>(
     `${TRANSACTIONS_PATH}/${id}/category`,
+    {
+      method: "PATCH",
+      body: JSON.stringify(request),
+    },
+  );
+}
+
+export async function batchUpdateTransactionCategory(
+  request: BatchUpdateTransactionCategoryRequest,
+): Promise<BatchUpdateTransactionCategoryData> {
+  return apiClient<BatchUpdateTransactionCategoryData>(
+    `${TRANSACTIONS_PATH}/category/batch`,
     {
       method: "PATCH",
       body: JSON.stringify(request),

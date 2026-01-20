@@ -18,7 +18,7 @@ const CATEGORIES = [
 ];
 
 interface CategoryEditModalProps {
-  category: string;
+  category?: string;
   opened: boolean;
   onClose: () => void;
   onSubmit: (category: string) => void;
@@ -30,7 +30,9 @@ const CategoryEditModal = ({
   onClose,
   onSubmit,
 }: CategoryEditModalProps) => {
-  const [selectedCategory, setSelectedCategory] = useState(category);
+  const [selectedCategory, setSelectedCategory] = useState(
+    category ?? CATEGORIES[0],
+  );
 
   const handleCategoryChange = (value: string | null) => {
     if (value) {
@@ -39,10 +41,12 @@ const CategoryEditModal = ({
   };
 
   const handleSubmit = () => {
-    onSubmit(selectedCategory);
+    if (selectedCategory) {
+      onSubmit(selectedCategory);
+    }
   };
 
-  const isDisabled = selectedCategory === category;
+  const isDisabled = category !== undefined && selectedCategory === category;
 
   return (
     <Modal centered opened={opened} title="Edit Category" onClose={onClose}>

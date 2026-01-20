@@ -42,3 +42,16 @@ export interface UpdateTransactionCategoryData {
 export interface UpdateTransactionCategoryRequest {
   category: string;
 }
+
+// Batch update transaction category
+export interface BatchUpdateTransactionCategoryData {
+  transactions: Transaction[];
+  failedIds: string[];
+  requestedCount: number;
+  updatedCount: number;
+}
+
+export interface BatchUpdateTransactionCategoryRequest {
+  ids: string[];
+  category: string;
+}
