@@ -8,8 +8,15 @@ import {
   TRANSACTIONS_QUERY_KEY,
 } from "./constants";
 
+/** Options for the useTransactions hook (excludes offset which is managed internally) */
 export type UseTransactionsOptions = Omit<TransactionListQuery, "offset">;
 
+/**
+ * Hook for fetching paginated transactions with infinite scroll support.
+ * Provides automatic pagination, caching, and refetching capabilities.
+ * @param options - Query options for filtering and sorting transactions
+ * @returns TanStack Query infinite query result with transactions data
+ */
 export const useTransactions = (options: UseTransactionsOptions = {}) => {
   const { limit = DEFAULT_LIMIT, sortBy, sortOrder, yearMonth } = options;
 

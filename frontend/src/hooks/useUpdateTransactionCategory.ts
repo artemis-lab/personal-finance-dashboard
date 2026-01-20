@@ -9,6 +9,11 @@ interface UpdateCategoryVariables {
   category: string;
 }
 
+/**
+ * Hook for updating a single transaction's category with optimistic updates.
+ * Supports optimistic updates with automatic rollback on error.
+ * @returns TanStack Query mutation with mutate function and status
+ */
 export const useUpdateTransactionCategory = () => {
   const queryClient = useQueryClient();
 

@@ -15,6 +15,7 @@ import CategoryEditModal from "./CategoryEditModal";
 const OVERSCAN = 10;
 const ROW_HEIGHT = 52;
 
+/** Props for TransactionTable component */
 interface TransactionTableProps {
   hasMore?: boolean;
   isLoading?: boolean;
@@ -26,6 +27,7 @@ interface TransactionTableProps {
   onSort: (sortBy: "date" | "amount") => void;
 }
 
+/** Virtualized transaction table with sorting, selection, and category editing */
 const TransactionTable = ({
   hasMore,
   isLoading,

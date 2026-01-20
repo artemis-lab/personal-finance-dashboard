@@ -2,6 +2,7 @@ import type { LucideIcon } from "lucide-react";
 import { BarChart3, Receipt } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
+/** Navigation item configuration */
 interface NavItem {
   to: string;
   label: string;
@@ -13,6 +14,7 @@ const navItems: NavItem[] = [
   { to: "/reports", label: "Reports", icon: BarChart3 },
 ];
 
+/** Application header with navigation links */
 const Header = () => {
   return (
     <header className="flex items-center gap-6 border-b border-gray-200 bg-white px-8 py-4">

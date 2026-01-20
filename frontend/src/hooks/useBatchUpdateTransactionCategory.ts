@@ -9,6 +9,11 @@ interface BatchUpdateCategoryVariables {
   category: string;
 }
 
+/**
+ * Hook for updating multiple transactions' categories in a single operation.
+ * Supports optimistic updates with automatic rollback on error.
+ * @returns TanStack Query mutation with mutate function and status
+ */
 export const useBatchUpdateTransactionCategory = () => {
   const queryClient = useQueryClient();
 

@@ -1,6 +1,7 @@
 import { Button, Modal, Select } from "@mantine/core";
 import { useState } from "react";
 
+/** Available transaction categories for selection */
 const CATEGORIES = [
   "Cash",
   "Dining",
@@ -17,6 +18,7 @@ const CATEGORIES = [
   "Utilities",
 ];
 
+/** Props for CategoryEditModal component */
 interface CategoryEditModalProps {
   category?: string;
   opened: boolean;
@@ -24,6 +26,7 @@ interface CategoryEditModalProps {
   onSubmit: (category: string) => void;
 }
 
+/** Modal dialog for editing transaction category */
 const CategoryEditModal = ({
   category,
   opened,

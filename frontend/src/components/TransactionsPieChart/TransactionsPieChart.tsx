@@ -7,6 +7,7 @@ interface TransactionsPieChartProps {
   categories: CategorySpending[];
 }
 
+/** Mantine color tokens for pie chart segments */
 const COLORS = [
   "blue.7",
   "red.7",
@@ -23,6 +24,7 @@ const COLORS = [
   "gray.7",
 ];
 
+/** Pie chart showing transaction count distribution by category */
 const TransactionsPieChart = ({ categories }: TransactionsPieChartProps) => {
   const data = categories.map((category, index) => ({
     name: category.category,

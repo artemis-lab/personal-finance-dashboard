@@ -7,6 +7,7 @@ interface ReportSummaryProps {
   report: MonthlySpendingReport;
 }
 
+/** Displays summary metrics for a monthly spending report */
 const ReportSummary = ({ report }: ReportSummaryProps) => {
   return (
     <Box className="flex gap-10 rounded-lg border border-gray-200 bg-white p-4">

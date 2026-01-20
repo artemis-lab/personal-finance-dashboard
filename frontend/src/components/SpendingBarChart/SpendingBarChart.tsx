@@ -8,6 +8,7 @@ interface SpendingBarChartProps {
   categories: CategorySpending[];
 }
 
+/** Bar chart showing spending amounts by category */
 const SpendingBarChart = ({ categories }: SpendingBarChartProps) => {
   const data = categories.map((category) => ({
     category: category.category,

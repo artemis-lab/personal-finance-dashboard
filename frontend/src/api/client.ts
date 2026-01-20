@@ -3,6 +3,14 @@ import { ApiError } from "./errors";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+/**
+ * Generic API client for making HTTP requests to the backend.
+ * Handles JSON serialization, error parsing, and response unwrapping.
+ * @param endpoint - API endpoint path (e.g., "/transactions")
+ * @param options - Optional fetch configuration (method, body, headers)
+ * @returns Promise resolving to the typed response data
+ * @throws {ApiError} When the API returns an error response
+ */
 export async function apiClient<T>(
   endpoint: string,
   options?: RequestInit,

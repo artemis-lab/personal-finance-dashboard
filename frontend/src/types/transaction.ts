@@ -1,9 +1,10 @@
-// Transaction types
-
+/** Source of the transaction category assignment */
 export type CategorySource = "ai" | "user";
 
+/** Type of financial transaction */
 export type TransactionType = "credit" | "debit";
 
+/** Represents a single financial transaction */
 export interface Transaction {
   amount: number;
   date: string;
@@ -19,13 +20,14 @@ export interface Transaction {
   transactionMethod?: string;
 }
 
+/** Response data for paginated transaction list */
 export interface TransactionListData {
   transactions: Transaction[];
   hasMore: boolean;
   total: number;
 }
 
-// Query parameters for transaction list
+/** Query parameters for fetching transaction list */
 export interface TransactionListQuery {
   limit?: number;
   offset?: number;
@@ -34,16 +36,17 @@ export interface TransactionListQuery {
   yearMonth?: string;
 }
 
-// Update transaction category
+/** Response data for single transaction category update */
 export interface UpdateTransactionCategoryData {
   transaction: Transaction;
 }
 
+/** Request body for updating transaction category */
 export interface UpdateTransactionCategoryRequest {
   category: string;
 }
 
-// Batch update transaction category
+/** Response data for batch transaction category update */
 export interface BatchUpdateTransactionCategoryData {
   transactions: Transaction[];
   failedIds: string[];
@@ -51,6 +54,7 @@ export interface BatchUpdateTransactionCategoryData {
   updatedCount: number;
 }
 
+/** Request body for batch updating transaction categories */
 export interface BatchUpdateTransactionCategoryRequest {
   ids: string[];
   category: string;

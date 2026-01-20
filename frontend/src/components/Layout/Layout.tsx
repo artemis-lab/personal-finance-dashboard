@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 
 import { Header } from "../Header";
 
+/** Root layout component with header and main content area */
 const Layout = () => {
   return (
     <div className="flex h-screen flex-col bg-linear-to-br from-blue-50 to-purple-50">

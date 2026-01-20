@@ -8,6 +8,7 @@ interface SpendingPieChartProps {
   categories: CategorySpending[];
 }
 
+/** Mantine color tokens for pie chart segments */
 const COLORS = [
   "blue.7",
   "red.7",
@@ -24,6 +25,7 @@ const COLORS = [
   "gray.7",
 ];
 
+/** Pie chart showing spending distribution by category */
 const SpendingPieChart = ({ categories }: SpendingPieChartProps) => {
   const data = categories.map((category, index) => ({
     name: category.category,

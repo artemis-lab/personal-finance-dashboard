@@ -10,6 +10,11 @@ import { apiClient } from "./client";
 
 const TRANSACTIONS_PATH = "/transactions";
 
+/**
+ * Fetches a paginated list of transactions with optional filtering and sorting.
+ * @param query - Query parameters for pagination, sorting, and filtering
+ * @returns Promise resolving to transaction list with pagination metadata
+ */
 export async function fetchTransactions(
   query: TransactionListQuery,
 ): Promise<TransactionListData> {
@@ -37,6 +42,12 @@ export async function fetchTransactions(
   return apiClient<TransactionListData>(endpoint);
 }
 
+/**
+ * Updates the category of a single transaction.
+ * @param id - Transaction ID to update
+ * @param request - Request body containing the new category
+ * @returns Promise resolving to the updated transaction
+ */
 export async function updateTransactionCategory(
   id: string,
   request: UpdateTransactionCategoryRequest,
@@ -50,6 +61,11 @@ export async function updateTransactionCategory(
   );
 }
 
+/**
+ * Updates the category of multiple transactions in a single request.
+ * @param request - Request body containing transaction IDs and new category
+ * @returns Promise resolving to batch update result with success/failure counts
+ */
 export async function batchUpdateTransactionCategory(
   request: BatchUpdateTransactionCategoryRequest,
 ): Promise<BatchUpdateTransactionCategoryData> {
