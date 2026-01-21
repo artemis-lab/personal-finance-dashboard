@@ -185,19 +185,36 @@ const TransactionTable = ({
     selectedIds.size > 0 && selectedIds.size < transactions.length;
 
   return (
-    <Box className="flex h-full flex-col overflow-hidden rounded-lg border border-gray-200 bg-white">
-      <Table>
+    <Box
+      aria-label="Transactions list"
+      className="flex h-full flex-col overflow-hidden rounded-lg border border-gray-200 bg-white"
+      role="region"
+    >
+      <Table aria-label="Transactions">
         <Table.Thead className="bg-gray-50">
           <Table.Tr>
             <Table.Th className="w-10">
               <Checkbox
                 checked={isAllSelected}
                 indeterminate={isIndeterminate}
+                aria-label={
+                  isAllSelected
+                    ? "Deselect all transactions"
+                    : "Select all transactions"
+                }
                 onChange={handleToggleSelectAll}
               />
             </Table.Th>
             <Table.Th
               className="w-28 cursor-pointer"
+              role="columnheader"
+              aria-sort={
+                sortBy === "date"
+                  ? sortOrder === "asc"
+                    ? "ascending"
+                    : "descending"
+                  : "none"
+              }
               onClick={() => handleHeaderClick("date")}
             >
               <span className="inline-flex items-center">
@@ -210,6 +227,14 @@ const TransactionTable = ({
             <Table.Th className="w-36">Merchant</Table.Th>
             <Table.Th
               className="w-28 cursor-pointer"
+              role="columnheader"
+              aria-sort={
+                sortBy === "amount"
+                  ? sortOrder === "asc"
+                    ? "ascending"
+                    : "descending"
+                  : "none"
+              }
               onClick={() => handleHeaderClick("amount")}
             >
               <span className="inline-flex items-center">
@@ -245,6 +270,7 @@ const TransactionTable = ({
                   >
                     <Table.Td className="w-10">
                       <Checkbox
+                        aria-label={`Select transaction: ${transaction.description}`}
                         checked={selectedIds.has(transaction.id)}
                         onChange={() => handleToggleSelect(transaction.id)}
                       />
@@ -269,15 +295,20 @@ const TransactionTable = ({
                           {transaction.category}
                         </span>
                         {isPending ? (
-                          <Loader2 className="h-3 w-3 animate-spin text-gray-500" />
+                          <Loader2
+                            aria-label="Updating category"
+                            className="h-3 w-3 animate-spin text-gray-500"
+                            role="status"
+                          />
                         ) : (
                           <ActionIcon
+                            aria-label={`Edit category for ${transaction.description}`}
                             color="gray"
                             size="xs"
                             variant="subtle"
                             onClick={() => handleEditCategory(transaction)}
                           >
-                            <Pencil className="h-3 w-3" />
+                            <Pencil aria-hidden="true" className="h-3 w-3" />
                           </ActionIcon>
                         )}
                       </div>
@@ -311,14 +342,18 @@ const TransactionTable = ({
         </div>
       </div>
 
-      <div className="flex h-12 items-center border-t border-gray-200 px-4">
+      <div
+        aria-label="Table actions and status"
+        className="flex h-12 items-center border-t border-gray-200 px-4"
+        role="toolbar"
+      >
         <div className="flex flex-1 items-center gap-2">
           {selectedIds.size > 0 && (
             <>
               <Button size="xs" onClick={() => setIsBatchEditOpen(true)}>
                 Update category
               </Button>
-              <Text c="gray" size="sm">
+              <Text aria-live="polite" c="gray" size="sm">
                 {selectedIds.size} selected
               </Text>
             </>
@@ -326,7 +361,7 @@ const TransactionTable = ({
         </div>
         <div className="flex-1 text-center">
           {isLoading && (
-            <Text c="gray" size="sm">
+            <Text aria-live="polite" c="gray" role="status" size="sm">
               Loading...
             </Text>
           )}
@@ -344,7 +379,7 @@ const TransactionTable = ({
           )}
         </div>
         <div className="flex flex-1 justify-end">
-          <Text c="gray" size="sm">
+          <Text aria-live="polite" c="gray" size="sm">
             Loaded {transactions.length} of {total}{" "}
             {total === 1 ? "transaction" : "transactions"}
           </Text>

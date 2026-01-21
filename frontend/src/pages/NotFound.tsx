@@ -2,8 +2,14 @@ import { Link } from "react-router-dom";
 
 const NotFound = () => {
   return (
-    <div className="mx-auto max-w-4xl text-center">
-      <h1 className="mb-4 text-6xl font-bold text-gray-800">404</h1>
+    <div
+      aria-labelledby="error-title"
+      className="mx-auto max-w-4xl text-center"
+      role="alert"
+    >
+      <h1 className="mb-4 text-6xl font-bold text-gray-800" id="error-title">
+        404
+      </h1>
       <h2 className="mb-8 text-2xl font-semibold text-gray-600">
         Page Not Found
       </h2>

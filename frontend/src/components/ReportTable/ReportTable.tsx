@@ -10,8 +10,16 @@ interface ReportTableProps {
 /** Table displaying spending breakdown by category */
 const ReportTable = ({ categories }: ReportTableProps) => {
   return (
-    <Box className="rounded-lg border border-gray-200 bg-white">
-      <Table highlightOnHover stickyHeader>
+    <Box
+      aria-label="Spending by category"
+      className="rounded-lg border border-gray-200 bg-white"
+      role="region"
+    >
+      <Table
+        highlightOnHover
+        stickyHeader
+        aria-label="Category spending breakdown"
+      >
         <Table.Thead>
           <Table.Tr>
             <Table.Th

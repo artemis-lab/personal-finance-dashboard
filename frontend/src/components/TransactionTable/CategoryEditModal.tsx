@@ -60,11 +60,19 @@ const CategoryEditModal = ({
         value={selectedCategory}
         onChange={handleCategoryChange}
       />
-      <div className="mt-4 flex justify-end gap-2">
+      <div
+        aria-label="Modal actions"
+        className="mt-4 flex justify-end gap-2"
+        role="group"
+      >
         <Button variant="default" onClick={onClose}>
           Cancel
         </Button>
-        <Button disabled={isDisabled} onClick={handleSubmit}>
+        <Button
+          aria-disabled={isDisabled}
+          disabled={isDisabled}
+          onClick={handleSubmit}
+        >
           Update
         </Button>
       </div>

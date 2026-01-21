@@ -33,12 +33,25 @@ const SpendingPieChart = ({ categories }: SpendingPieChartProps) => {
     color: COLORS[index % COLORS.length] ?? "blue.7",
   }));
 
+  const chartDescription = categories
+    .map((c) => `${c.category}: ${formatCurrency(c.amount)}`)
+    .join(", ");
+
   return (
-    <Box className="flex min-w-0 flex-1 flex-col rounded-lg border border-gray-200 bg-white p-4">
-      <Text fw={600} mb="md" size="sm">
+    <Box
+      aria-label="Spending distribution chart"
+      className="flex min-w-0 flex-1 flex-col rounded-lg border border-gray-200 bg-white p-4"
+      role="figure"
+    >
+      <Text fw={600} id="spending-pie-title" mb="md" size="sm">
         Spending Distribution
       </Text>
-      <div className="flex flex-1 items-center justify-center">
+      <div
+        aria-describedby="spending-pie-desc"
+        aria-labelledby="spending-pie-title"
+        className="flex flex-1 items-center justify-center"
+        role="img"
+      >
         <PieChart
           withLabelsLine
           withTooltip
@@ -50,6 +63,9 @@ const SpendingPieChart = ({ categories }: SpendingPieChartProps) => {
           valueFormatter={(value) => formatCurrency(value)}
         />
       </div>
+      <span className="sr-only" id="spending-pie-desc">
+        {chartDescription}
+      </span>
     </Box>
   );
 };

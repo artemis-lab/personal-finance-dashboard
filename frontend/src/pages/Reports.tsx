@@ -30,10 +30,16 @@ const Reports = () => {
   const report = data?.report;
 
   return (
-    <div className="flex h-full flex-col gap-6">
-      <Title order={2}>Monthly Spending Report</Title>
+    <div aria-labelledby="reports-title" className="flex h-full flex-col gap-6">
+      <Title id="reports-title" order={2}>
+        Monthly Spending Report
+      </Title>
 
-      <div className="flex flex-wrap items-end gap-4">
+      <div
+        aria-label="Report filters"
+        className="flex flex-wrap items-end gap-4"
+        role="search"
+      >
         <MonthPickerInput
           className="w-48"
           label="Select month"
@@ -41,20 +47,28 @@ const Reports = () => {
           value={yearMonth ?? null}
           onChange={handleMonthChange}
         />
-        <Button disabled={!yearMonth} onClick={handleGenerateReport}>
+        <Button
+          aria-disabled={!yearMonth}
+          disabled={!yearMonth}
+          onClick={handleGenerateReport}
+        >
           Generate Report
         </Button>
       </div>
 
-      <div className="min-h-0 flex-1">
+      <div aria-live="polite" className="min-h-0 flex-1">
         {isLoading ? (
-          <div className="flex h-full items-center justify-center">
-            <Loader size="lg" />
+          <div
+            aria-label="Loading report"
+            className="flex h-full items-center justify-center"
+            role="status"
+          >
+            <Loader aria-hidden="true" size="lg" />
           </div>
         ) : error ? (
           <Alert
             color="red"
-            icon={<AlertCircle className="h-5 w-5" />}
+            icon={<AlertCircle aria-hidden="true" className="h-5 w-5" />}
             title="Error loading report"
           >
             {error instanceof ApiError ? error.message : "An error occurred"}

@@ -72,10 +72,19 @@ const Transactions = () => {
   }, []);
 
   return (
-    <div className="flex h-full flex-col gap-6">
-      <Title order={2}>Transactions</Title>
+    <div
+      aria-labelledby="transactions-title"
+      className="flex h-full flex-col gap-6"
+    >
+      <Title id="transactions-title" order={2}>
+        Transactions
+      </Title>
 
-      <div className="flex flex-wrap items-center gap-4">
+      <div
+        aria-label="Transaction filters and sorting"
+        className="flex flex-wrap items-center gap-4"
+        role="search"
+      >
         <MonthPickerInput
           clearable
           className="w-48"
@@ -112,21 +121,25 @@ const Transactions = () => {
           variant="light"
           onClick={() => refetch()}
         >
-          <RefreshCw size={18} />
+          <RefreshCw aria-hidden="true" size={18} />
         </ActionIcon>
       </div>
-      <div className="min-h-0 flex-1">
+      <div aria-live="polite" className="min-h-0 flex-1">
         {error ? (
           <Alert
             color="red"
-            icon={<AlertCircle className="h-5 w-5" />}
+            icon={<AlertCircle aria-hidden="true" className="h-5 w-5" />}
             title="Error loading transactions"
           >
             {error instanceof ApiError ? error.message : "An error occurred"}
           </Alert>
         ) : isLoading ? (
-          <div className="flex h-full items-center justify-center">
-            <Loader size="lg" />
+          <div
+            aria-label="Loading transactions"
+            className="flex h-full items-center justify-center"
+            role="status"
+          >
+            <Loader aria-hidden="true" size="lg" />
           </div>
         ) : transactions.length === 0 ? (
           <div className="flex h-full items-center justify-center rounded-lg border border-gray-200 bg-white">

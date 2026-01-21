@@ -32,12 +32,25 @@ const TransactionsPieChart = ({ categories }: TransactionsPieChartProps) => {
     color: COLORS[index % COLORS.length] ?? "blue.7",
   }));
 
+  const chartDescription = categories
+    .map((c) => `${c.category}: ${c.transactionCount} transactions`)
+    .join(", ");
+
   return (
-    <Box className="flex min-w-0 flex-1 flex-col rounded-lg border border-gray-200 bg-white p-4">
-      <Text fw={600} mb="md" size="sm">
+    <Box
+      aria-label="Transaction distribution chart"
+      className="flex min-w-0 flex-1 flex-col rounded-lg border border-gray-200 bg-white p-4"
+      role="figure"
+    >
+      <Text fw={600} id="transaction-pie-title" mb="md" size="sm">
         Transaction Distribution
       </Text>
-      <div className="flex flex-1 items-center justify-center">
+      <div
+        aria-describedby="transaction-pie-desc"
+        aria-labelledby="transaction-pie-title"
+        className="flex flex-1 items-center justify-center"
+        role="img"
+      >
         <PieChart
           withLabelsLine
           withTooltip
@@ -48,6 +61,9 @@ const TransactionsPieChart = ({ categories }: TransactionsPieChartProps) => {
           tooltipDataSource="segment"
         />
       </div>
+      <span className="sr-only" id="transaction-pie-desc">
+        {chartDescription}
+      </span>
     </Box>
   );
 };

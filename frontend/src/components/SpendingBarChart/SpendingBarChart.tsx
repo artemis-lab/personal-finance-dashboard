@@ -15,20 +15,37 @@ const SpendingBarChart = ({ categories }: SpendingBarChartProps) => {
     amount: category.amount,
   }));
 
+  const chartDescription = categories
+    .map((c) => `${c.category}: ${formatCurrency(c.amount)}`)
+    .join(", ");
+
   return (
-    <Box className="flex min-w-0 flex-1 flex-col rounded-lg border border-gray-200 bg-white p-4">
-      <Text fw={600} mb="md" size="sm">
+    <Box
+      aria-label="Spending by category chart"
+      className="flex min-w-0 flex-1 flex-col rounded-lg border border-gray-200 bg-white p-4"
+      role="figure"
+    >
+      <Text fw={600} id="spending-bar-title" mb="md" size="sm">
         Spending by Category
       </Text>
-      <BarChart
-        className="pl-4"
-        data={data}
-        dataKey="category"
-        h={250}
-        series={[{ name: "amount", color: "blue.7" }]}
-        tickLine="y"
-        valueFormatter={(value) => formatCurrency(value)}
-      />
+      <div
+        aria-describedby="spending-bar-desc"
+        aria-labelledby="spending-bar-title"
+        role="img"
+      >
+        <BarChart
+          className="pl-4"
+          data={data}
+          dataKey="category"
+          h={250}
+          series={[{ name: "amount", color: "blue.7" }]}
+          tickLine="y"
+          valueFormatter={(value) => formatCurrency(value)}
+        />
+      </div>
+      <span className="sr-only" id="spending-bar-desc">
+        {chartDescription}
+      </span>
     </Box>
   );
 };

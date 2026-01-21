@@ -17,11 +17,14 @@ const navItems: NavItem[] = [
 /** Application header with navigation links */
 const Header = () => {
   return (
-    <header className="flex items-center gap-6 border-b border-gray-200 bg-white px-8 py-4">
+    <header
+      className="flex items-center gap-6 border-b border-gray-200 bg-white px-8 py-4"
+      role="banner"
+    >
       <span className="text-lg font-semibold text-gray-800">
         Personal Finance Dashboard
       </span>
-      <nav className="flex gap-1">
+      <nav aria-label="Main navigation" className="flex gap-1">
         {navItems.map((item) => (
           <NavLink
             key={item.to}
@@ -34,7 +37,7 @@ const Header = () => {
               }`
             }
           >
-            <item.icon className="h-4 w-4" />
+            <item.icon aria-hidden="true" className="h-4 w-4" />
             {item.label}
           </NavLink>
         ))}
