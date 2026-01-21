@@ -1,6 +1,6 @@
 # Personal Finance Dashboard
 
-A frontend application that allows users to import transaction history, view categorized transactions, and generate reports. Built with React 19, TypeScript, Vite, and Tailwind CSS 4.
+A frontend application that allows users to import transaction history, view categorized transactions, and generate reports. Built with React 19, TypeScript, Vite, Mantine UI, Tailwind CSS 4, and TanStack Query.
 
 ## Getting Started
 
