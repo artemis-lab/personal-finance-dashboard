@@ -12,7 +12,7 @@ const ReportTable = ({ categories }: ReportTableProps) => {
   return (
     <Box
       aria-label="Spending by category"
-      className="rounded-lg border border-gray-200 bg-white"
+      className="min-w-150 rounded-lg border border-gray-200 bg-white"
       role="region"
     >
       <Table

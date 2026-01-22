@@ -12,7 +12,7 @@ const ReportSummary = ({ report }: ReportSummaryProps) => {
   return (
     <Box
       aria-label="Monthly spending summary"
-      className="flex gap-10 rounded-lg border border-gray-200 bg-white p-4"
+      className="flex gap-5 rounded-lg border border-gray-200 bg-white p-4 sm:gap-10"
       role="region"
     >
       <div aria-label={`Categories: ${report.categories.length}`} role="group">

@@ -18,19 +18,19 @@ const navItems: NavItem[] = [
 const Header = () => {
   return (
     <header
-      className="flex items-center gap-6 border-b border-gray-200 bg-white px-8 py-4"
+      className="flex flex-col gap-2 border-b border-gray-200 bg-white px-4 py-3 sm:flex-row sm:items-center sm:gap-8 sm:px-8 sm:py-4"
       role="banner"
     >
-      <span className="text-lg font-semibold text-gray-800">
+      <span className="text-base font-semibold text-gray-800 sm:text-lg">
         Personal Finance Dashboard
       </span>
-      <nav aria-label="Main navigation" className="flex gap-1">
+      <nav aria-label="Main navigation" className="flex gap-2">
         {navItems.map((item) => (
           <NavLink
             key={item.to}
             to={item.to}
             className={({ isActive }) =>
-              `flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+              `flex items-center gap-2 rounded-md px-2 py-2 text-sm font-medium transition-colors ${
                 isActive
                   ? "bg-blue-50 text-blue-700"
                   : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"

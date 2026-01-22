@@ -344,7 +344,7 @@ const TransactionTable = ({
 
       <div
         aria-label="Table actions and status"
-        className="flex h-12 items-center border-t border-gray-200 px-4"
+        className={`flex ${selectedIds.size > 0 ? "h-20 pt-1" : "h-12"} flex-col items-center border-t border-gray-200 px-4 sm:flex-row`}
         role="toolbar"
       >
         <div className="flex flex-1 items-center gap-2">

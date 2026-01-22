@@ -30,18 +30,21 @@ const Reports = () => {
   const report = data?.report;
 
   return (
-    <div aria-labelledby="reports-title" className="flex h-full flex-col gap-6">
-      <Title id="reports-title" order={2}>
+    <div
+      aria-labelledby="reports-title"
+      className="flex h-full flex-col gap-4 sm:gap-6"
+    >
+      <Title id="reports-title" order={3}>
         Monthly Spending Report
       </Title>
 
       <div
         aria-label="Report filters"
-        className="flex flex-wrap items-end gap-4"
+        className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end sm:gap-4"
         role="search"
       >
         <MonthPickerInput
-          className="w-48"
+          className="w-full sm:w-48"
           label="Select month"
           placeholder="Select a month"
           value={yearMonth ?? null}
@@ -74,30 +77,30 @@ const Reports = () => {
             {error instanceof ApiError ? error.message : "An error occurred"}
           </Alert>
         ) : !data ? (
-          <div className="flex h-full items-center justify-center rounded-lg border border-gray-200 bg-white">
+          <div className="flex h-full items-center justify-center rounded-lg border border-gray-200 bg-white px-4 text-center">
             <Text c="gray">
               Select a month and click "Generate Report" to view the spending
               report
             </Text>
           </div>
         ) : !report || report.categories.length === 0 ? (
-          <div className="flex h-full items-center justify-center rounded-lg border border-gray-200 bg-white">
+          <div className="flex h-full items-center justify-center rounded-lg border border-gray-200 bg-white px-4 text-center">
             <Text c="gray">No spending data for this month</Text>
           </div>
         ) : (
           <div className="flex h-full flex-col gap-4">
             <ReportSummary report={report} />
-            <div className="overflow-auto">
+            <div className="flex flex-col gap-4 overflow-auto">
               <div className="flex flex-col gap-4">
-                <div className="flex gap-4">
+                <div className="flex flex-col gap-4 sm:flex-row">
                   <SpendingBarChart categories={report.categories} />
-                  <div className="flex flex-1 flex-row gap-4">
+                  <div className="flex flex-1 flex-col gap-4 sm:flex-row">
                     <SpendingPieChart categories={report.categories} />
                     <TransactionsPieChart categories={report.categories} />
                   </div>
                 </div>
-                <ReportTable categories={report.categories} />
               </div>
+              <ReportTable categories={report.categories} />
             </div>
           </div>
         )}

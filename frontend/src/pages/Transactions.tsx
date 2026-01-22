@@ -76,25 +76,25 @@ const Transactions = () => {
       aria-labelledby="transactions-title"
       className="flex h-full flex-col gap-6"
     >
-      <Title id="transactions-title" order={2}>
+      <Title id="transactions-title" order={3}>
         Transactions
       </Title>
 
       <div
         aria-label="Transaction filters and sorting"
-        className="flex flex-wrap items-center gap-4"
+        className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end sm:gap-4"
         role="search"
       >
         <MonthPickerInput
           clearable
-          className="w-48"
+          className="w-full sm:w-48"
           label="Filter by month"
           placeholder="All time"
           value={options.yearMonth ?? null}
           onChange={handleMonthChange}
         />
         <Select
-          className="w-48"
+          className="w-full sm:w-48"
           label="Sort by"
           value={options.sortBy}
           data={[
@@ -104,7 +104,7 @@ const Transactions = () => {
           onChange={handleSortByChange}
         />
         <Select
-          className="w-48"
+          className="w-full sm:w-48"
           label="Order"
           value={options.sortOrder}
           data={[
@@ -115,7 +115,7 @@ const Transactions = () => {
         />
         <ActionIcon
           aria-label="Reload transactions"
-          className="mt-6"
+          className="place-self-end"
           loading={isRefetching}
           size="lg"
           variant="light"
