@@ -34,7 +34,7 @@ npm install
 npm run dev
 ```
 
-App available at `http://localhost:5173`. See [frontend/README.md](frontend/README.md) for full documentation.
+Application available at `http://localhost:5173`. See [frontend/README.md](frontend/README.md) for full documentation.
 
 ## Tech Stack
 
