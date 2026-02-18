@@ -190,7 +190,7 @@ const TransactionTable = ({
       className="flex h-full flex-col overflow-hidden rounded-lg border border-gray-200 bg-white"
       role="region"
     >
-      <Table aria-label="Transactions">
+      {/* <Table aria-label="Transactions">
         <Table.Thead className="bg-gray-50">
           <Table.Tr>
             <Table.Th className="w-10">
@@ -244,102 +244,185 @@ const TransactionTable = ({
             </Table.Th>
           </Table.Tr>
         </Table.Thead>
-      </Table>
+      </Table> */}
 
-      <div ref={parentRef} className="min-h-0 flex-1 overflow-auto">
-        <div
-          className="relative w-full"
-          style={{ height: `${virtualizer.getTotalSize()}px` }}
-        >
-          <Table highlightOnHover>
-            <Table.Tbody>
-              {virtualizer.getVirtualItems().map((virtualRow) => {
-                const transaction = transactions[virtualRow.index];
-                if (!transaction) {
-                  return null;
+      <div ref={parentRef} className="min-h-0 w-full flex-1 overflow-auto">
+        <Table highlightOnHover stickyHeader aria-label="Transactions">
+          <Table.Thead>
+            <Table.Tr>
+              <Table.Th
+                className="w-10"
+                style={{
+                  backgroundColor: "var(--color-gray-50)",
+                }}
+              >
+                <Checkbox
+                  checked={isAllSelected}
+                  indeterminate={isIndeterminate}
+                  aria-label={
+                    isAllSelected
+                      ? "Deselect all transactions"
+                      : "Select all transactions"
+                  }
+                  onChange={handleToggleSelectAll}
+                />
+              </Table.Th>
+              <Table.Th
+                className="w-28 min-w-28 cursor-pointer"
+                role="columnheader"
+                aria-sort={
+                  sortBy === "date"
+                    ? sortOrder === "asc"
+                      ? "ascending"
+                      : "descending"
+                    : "none"
                 }
-                const isPending = pendingUpdateIds.has(transaction.id);
-                return (
-                  <Table.Tr
-                    key={transaction.id}
-                    className="absolute top-0 left-0 table w-full table-fixed"
-                    style={{
-                      height: `${virtualRow.size}px`,
-                      transform: `translateY(${virtualRow.start}px)`,
-                    }}
-                  >
-                    <Table.Td className="w-10">
-                      <Checkbox
-                        aria-label={`Select transaction: ${transaction.description}`}
-                        checked={selectedIds.has(transaction.id)}
-                        onChange={() => handleToggleSelect(transaction.id)}
-                      />
-                    </Table.Td>
-                    <Table.Td className="w-28">
-                      <Text size="sm">{formatDate(transaction.date)}</Text>
-                    </Table.Td>
-                    <Table.Td className="w-48">
-                      <Text lineClamp={1} size="sm">
-                        {transaction.description}
-                      </Text>
-                    </Table.Td>
-                    <Table.Td className="w-32">
-                      <div className="flex items-center gap-1">
-                        <span
-                          className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
-                            transaction.categorySource === "user"
-                              ? "bg-blue-100 text-blue-800"
-                              : "bg-green-100 text-green-800"
-                          }`}
-                        >
-                          {transaction.category}
-                        </span>
-                        {isPending ? (
-                          <Loader2
-                            aria-label="Updating category"
-                            className="h-3 w-3 animate-spin text-gray-500"
-                            role="status"
-                          />
-                        ) : (
-                          <ActionIcon
-                            aria-label={`Edit category for ${transaction.description}`}
-                            color="gray"
-                            size="xs"
-                            variant="subtle"
-                            onClick={() => handleEditCategory(transaction)}
-                          >
-                            <Pencil aria-hidden="true" className="h-3 w-3" />
-                          </ActionIcon>
-                        )}
-                      </div>
-                    </Table.Td>
-                    <Table.Td className="w-36">
-                      <Text lineClamp={1} size="sm">
-                        {transaction.merchant}
-                      </Text>
-                    </Table.Td>
-                    <Table.Td className="w-28">
-                      <Text
-                        fw={500}
-                        size="sm"
-                        c={
-                          transaction.transactionType === "credit"
-                            ? "green.7"
-                            : "red.7"
-                        }
+                style={{
+                  backgroundColor: "var(--color-gray-50)",
+                }}
+                onClick={() => handleHeaderClick("date")}
+              >
+                <span className="inline-flex items-center">
+                  Date
+                  <SortIcon column="date" />
+                </span>
+              </Table.Th>
+              <Table.Th
+                className="w-48 min-w-48"
+                style={{
+                  backgroundColor: "var(--color-gray-50)",
+                }}
+              >
+                Description
+              </Table.Th>
+              <Table.Th
+                className="w-32 min-w-32"
+                style={{
+                  backgroundColor: "var(--color-gray-50)",
+                }}
+              >
+                Category
+              </Table.Th>
+              <Table.Th
+                className="w-36 min-w-36"
+                style={{
+                  backgroundColor: "var(--color-gray-50)",
+                }}
+              >
+                Merchant
+              </Table.Th>
+              <Table.Th
+                className="w-28 min-w-28 cursor-pointer"
+                role="columnheader"
+                aria-sort={
+                  sortBy === "amount"
+                    ? sortOrder === "asc"
+                      ? "ascending"
+                      : "descending"
+                    : "none"
+                }
+                style={{
+                  backgroundColor: "var(--color-gray-50)",
+                }}
+                onClick={() => handleHeaderClick("amount")}
+              >
+                <span className="inline-flex items-center">
+                  Amount
+                  <SortIcon column="amount" />
+                </span>
+              </Table.Th>
+            </Table.Tr>
+          </Table.Thead>
+          <Table.Tbody className="relative">
+            <tr style={{ height: `${virtualizer.getTotalSize()}px` }}>
+              <td colSpan={6} />
+            </tr>
+            {virtualizer.getVirtualItems().map((virtualRow) => {
+              const transaction = transactions[virtualRow.index];
+              if (!transaction) {
+                return null;
+              }
+              const isPending = pendingUpdateIds.has(transaction.id);
+              return (
+                <Table.Tr
+                  key={transaction.id}
+                  className="absolute top-0 left-0 table w-full table-fixed"
+                  style={{
+                    height: `${virtualRow.size}px`,
+                    transform: `translateY(${virtualRow.start}px)`,
+                  }}
+                >
+                  <Table.Td className="w-10">
+                    <Checkbox
+                      aria-label={`Select transaction: ${transaction.description}`}
+                      checked={selectedIds.has(transaction.id)}
+                      onChange={() => handleToggleSelect(transaction.id)}
+                    />
+                  </Table.Td>
+                  <Table.Td className="w-28">
+                    <Text size="sm">{formatDate(transaction.date)}</Text>
+                  </Table.Td>
+                  <Table.Td className="w-48">
+                    <Text lineClamp={1} size="sm">
+                      {transaction.description}
+                    </Text>
+                  </Table.Td>
+                  <Table.Td className="w-32">
+                    <div className="flex items-center gap-1">
+                      <span
+                        className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
+                          transaction.categorySource === "user"
+                            ? "bg-blue-100 text-blue-800"
+                            : "bg-green-100 text-green-800"
+                        }`}
                       >
-                        {formatAmount(
-                          transaction.amount,
-                          transaction.transactionType,
-                        )}
-                      </Text>
-                    </Table.Td>
-                  </Table.Tr>
-                );
-              })}
-            </Table.Tbody>
-          </Table>
-        </div>
+                        {transaction.category}
+                      </span>
+                      {isPending ? (
+                        <Loader2
+                          aria-label="Updating category"
+                          className="h-3 w-3 animate-spin text-gray-500"
+                          role="status"
+                        />
+                      ) : (
+                        <ActionIcon
+                          aria-label={`Edit category for ${transaction.description}`}
+                          color="gray"
+                          size="xs"
+                          variant="subtle"
+                          onClick={() => handleEditCategory(transaction)}
+                        >
+                          <Pencil aria-hidden="true" className="h-3 w-3" />
+                        </ActionIcon>
+                      )}
+                    </div>
+                  </Table.Td>
+                  <Table.Td className="w-36">
+                    <Text lineClamp={1} size="sm">
+                      {transaction.merchant}
+                    </Text>
+                  </Table.Td>
+                  <Table.Td className="w-28">
+                    <Text
+                      fw={500}
+                      size="sm"
+                      c={
+                        transaction.transactionType === "credit"
+                          ? "green.7"
+                          : "red.7"
+                      }
+                    >
+                      {formatAmount(
+                        transaction.amount,
+                        transaction.transactionType,
+                      )}
+                    </Text>
+                  </Table.Td>
+                </Table.Tr>
+              );
+            })}
+          </Table.Tbody>
+        </Table>
       </div>
 
       <div
