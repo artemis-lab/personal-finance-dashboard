@@ -4,6 +4,8 @@ A full-stack application for importing transaction history, categorizing expense
 
 > **Note:** Transaction importing and expense categorization are not yet implemented. For demo purposes, the application uses seeded data.
 
+For architecture and system design details, see the [presentation](https://github.com/artemis-lab/technical-design/blob/master/personal-finance-dashboard.pdf).
+
 ## Project Structure
 
 ```
