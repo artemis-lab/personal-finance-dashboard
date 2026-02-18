@@ -242,17 +242,21 @@ curl "http://localhost:3000/api/v1/transactions?sortBy=amount&sortOrder=desc"
 
 ## Rate Limiting
 
-The API implements rate limiting to prevent abuse:
+The API implements rate limiting per IP address to prevent abuse:
 
 **Global Rate Limit:**
 
 - **Limit**: 100 requests per IP address
 - **Window**: 15 minutes (900 seconds)
 
-**Transactions Endpoint Rate Limit:**
+**Endpoint-Specific Rate Limits (per IP address):**
 
-- **Limit**: 100 requests per IP address
-- **Window**: 1 minute (60 seconds)
+| Endpoint                                    | Limit | Window |
+| ------------------------------------------- | ----- | ------ |
+| `GET /api/v1/transactions`                  | 100   | 1 min  |
+| `PATCH /api/v1/transactions/{id}/category`  | 60    | 1 min  |
+| `PATCH /api/v1/transactions/category/batch` | 20    | 1 min  |
+| `GET /api/v1/reports/monthly/{yearMonth}`   | 30    | 1 min  |
 
 **Headers**: Standard `RateLimit-*` headers are returned with every response
 
