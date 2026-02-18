@@ -3,6 +3,8 @@
 
 A Node.js/Express API service that allows import transaction history, categorize expenses, and generate reports. Built with Node.js, TypeScript, Express, and Zod.
 
+> **Note:** Transaction importing and expense categorization are not yet implemented. The service uses seeded data (200 sample transactions).
+
 <!-- omit in toc -->
 ## Table of Contents
 

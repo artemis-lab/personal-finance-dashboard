@@ -2,6 +2,8 @@
 
 A full-stack application for importing transaction history, categorizing expenses, and generating financial reports.
 
+> **Note:** Transaction importing and expense categorization are not yet implemented. For demo purposes, the application uses seeded data.
+
 ## Project Structure
 
 ```

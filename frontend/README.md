@@ -2,6 +2,8 @@
 
 A frontend application that allows users to import transaction history, view categorized transactions, and generate reports. Built with React 19, TypeScript, Vite, Mantine UI, Tailwind CSS 4, and TanStack Query.
 
+> **Note:** Transaction importing and expense categorization are not yet implemented. The application uses seeded data.
+
 ## Getting Started
 
 ### Prerequisites
